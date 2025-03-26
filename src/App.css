@@ -1,0 +1,757 @@
+/* 
+ * BPS Broadcast Positioning Dashboard - App.css
+ * Military-style UI theme with tactical visualization
+ */
+
+/* =============================================
+   ROOT VARIABLES & BASE STYLES
+   ============================================= */
+   :root {
+    /* Color Palette */
+    --military-green: #0a2d1c;
+    --military-dark: #0a1f16;
+    --military-light: #3a5a40;
+    --accent-yellow: #ffb400;
+    --accent-red: #ff3b30;
+    --accent-blue: #007aff;
+    --text-green: #4eff91;
+    --text-yellow: #ffe74c;
+    --text-red: #ff5c5c;
+    
+    /* UI Elements */
+    --grid-line: rgba(74, 255, 160, 0.2);
+    --terminal-bg: rgba(10, 45, 28, 0.85);
+    --terminal-border: #1a5a40;
+    --glass-overlay: rgba(9, 44, 21, 0.65);
+    
+    /* Effects */
+    --glow-green: 0 0 10px rgba(74, 255, 160, 0.4);
+    --crt-scanline: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='scanlines' width='1' height='2' patternUnits='userSpaceOnUse' patternTransform='rotate(0)'%3E%3Crect x='0' y='0' width='1' height='1' fill='rgba(0, 0, 0, 0)'/%3E%3Crect x='0' y='1' width='1' height='1' fill='rgba(0, 0, 0, 0.03)'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23scanlines)'/%3E%3C/svg%3E");
+    --grid-background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='rgba(74, 255, 160, 0.1)' stroke-width='1'/%3E%3C/svg%3E");
+    
+    /* Typography */
+    --font-terminal: 'JetBrains Mono', 'Courier New', monospace;
+    --font-display: 'Orbitron', 'Arial', sans-serif;
+    --font-tactical: 'Quantico', 'Verdana', sans-serif;
+
+    --font-power: 'VT323', monospace;
+  }
+  
+  /* Font imports */
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700&family=Quantico:wght@400;700&display=swap');
+  
+  /* Base styles */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  body {
+    margin: 0;
+    font-family: var(--font-terminal);
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  
+  /* =============================================
+     APP & MAIN LAYOUT
+     ============================================= */
+  .App {
+    background-color: var(--military-dark);
+    background-image: var(--grid-background);
+    color: var(--text-green);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    padding: 0;
+  }
+  
+  .App::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--crt-scanline);
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.7;
+  }
+  
+  /* Main layout containers */
+  .container {
+    width: 96%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+  
+  .header {
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    border-bottom: 2px solid var(--accent-yellow);
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-yellow);
+    text-shadow: var(--glow-green);
+  }
+  
+  .header p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  
+  /* =============================================
+     DASHBOARD COMPONENTS
+     ============================================= */
+  
+  /* Dashboard layout */
+  .dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+  }
+  
+  /* Cards */
+  .card, .delay-card {
+    flex: 1;
+    min-width: 300px; 
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+  }
+    /* Military Theme */
+  .App.theme-military .card {
+    background-color: #152b12; /* example dark-greenish for military */
+    border: 1px solid #4eff91; /* optional: match the green text */
+  }
+
+  /* Power Grid Theme */
+  .App.theme-power .card {
+    background-color: #22457a; /* darker slate for a power-grid look */
+    border: 1px solid #00e5ff; /* optional: electric-blue border */
+  }
+
+  /* Finance Theme */
+  .App.theme-finance .card {
+    background-color: #d6d5ce; /* crisp white for finance */
+    border: 1px solid #ccc;    /* subtle gray border */
+  }
+
+  /* Normal Theme */
+  .App.theme-normal .card {
+    background-color: #0e37a8; /* classic light-gray for normal */
+    border: 1px solid #000000;    /* optional: light border */
+  }
+
+  .App.theme-power .sync-details span {
+    text-shadow: 0 0 6px #00e5ff;
+  }
+  .App.theme-finance .sync-details span {
+    text-shadow: 0 0 6px #ffffff;
+  }
+  .App.theme-normal .sync-details span {
+    text-shadow: 0 0 3px #444;
+  }
+  
+
+
+  /* Master clock */
+  .master-clock {
+    font-family: var(--font-terminal);
+    padding: 10px;
+    border-bottom: 1px solid var(--grid-line);
+    margin-bottom: 15px;
+  }
+  
+  .master-clock h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--text-yellow);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  
+  .master-clock p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+  
+  #master-clock-time {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-yellow);
+    letter-spacing: 1px;
+  }
+  
+  /* System status */
+  .sync-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0;
+    font-family: var(--font-terminal);
+    font-size: 0.9rem;
+  }
+  
+  .sync-details p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .status-active {
+    animation: pulse 2s infinite;
+  }
+  
+  /* =============================================
+     TAB SYSTEM
+     ============================================= */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin: 15px 0 10px 0;
+    border-bottom: 1px solid var(--terminal-border);
+  }
+  
+  .tab {
+    background: var(--military-dark);
+    border: 1px solid var(--terminal-border);
+    border-bottom: none;
+    color: var(--text-green);
+    font-family: var(--font-tactical);
+    padding: 8px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    position: relative;
+    letter-spacing: 1px;
+  }
+  
+  .tab:hover {
+    background: rgba(58, 90, 64, 0.3);
+  }
+  
+  .tab-content {
+    padding: 10px 0;
+    font-size: 0.9rem;
+  }
+  
+  .tab-content p {
+    margin-bottom: 5px;
+  }
+  
+  /* =============================================
+     MAP COMPONENTS
+     ============================================= */
+  .map-container, #gps-map, #bps-map {
+    width: 100%;
+    height: 300px;
+    border: 1px solid var(--terminal-border);
+    margin-top: 10px;
+    background-color: #0a1a14;
+    position: relative;
+  }
+  
+  .map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 10px 0;
+  }
+  
+  .map-controls button {
+    background: linear-gradient(to bottom, #1a3e2a, #0c2418);
+    border: 1px solid var(--terminal-border);
+    color: var(--text-green);
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  
+  .map-controls button:hover {
+    background: linear-gradient(to bottom, #234d38, #0c2a1c);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* =============================================
+     BUTTONS & CONTROLS
+     ============================================= */
+  button {
+    background: linear-gradient(to bottom, #1a3e2a, #0c2418);
+    border: 1px solid var(--terminal-border);
+    color: var(--text-green);
+    font-family: var(--font-terminal);
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+  
+  button:hover {
+    background: linear-gradient(to bottom, #234d38, #0c2a1c);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  button:active {
+    background: linear-gradient(to bottom, #0c2418, #1a3e2a);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+  }
+  
+  .failover-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: space-between;
+  }
+  
+  #dark-mode-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 1.2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 90;
+  }
+  
+  /* =============================================
+     ALERTS & NOTIFICATIONS
+     ============================================= */
+  .failover-alert {
+    background: rgba(255, 59, 48, 0.15);
+    border: 1px solid var(--accent-red);
+    border-left: 5px solid var(--accent-red);
+    color: var(--text-red);
+    padding: 10px 15px;
+    margin: 10px 0;
+    font-family: var(--font-tactical);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    animation: alertPulse 2s infinite;
+  }
+  
+  .failover-alert p::before {
+    content: "⚠";
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }
+  
+/* Failover Readiness - Bubble Styling */
+.failover-readiness {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between text and bubble */
+  font-size: 1rem;
+  font-family: var(--font-terminal);
+  margin: 10px auto;
+}
+
+/* Bubble Styles */
+.readiness-bubble {
+  padding: 8px 15px;
+  border-radius: 20px; /* Rounded bubble */
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  min-width: 120px; /* Ensures it maintains a shape */
+}
+
+/* Stable (Green Bubble) */
+.readiness-bubble.stable {
+  background-color: rgba(50, 205, 50, 0.2); /* Light green */
+  border: 1px solid limegreen;
+  color: limegreen;
+  box-shadow: 0px 0px 8px rgba(50, 205, 50, 0.4);
+}
+
+/* Failover Active (Red Bubble) */
+.readiness-bubble.active {
+  background-color: rgba(255, 69, 58, 0.2); /* Light red */
+  border: 1px solid red;
+  color: red;
+  box-shadow: 0px 0px 8px rgba(255, 69, 58, 0.5);
+}
+
+
+  /* =============================================
+     CHART & DATA VISUALIZATION
+     ============================================= */
+  .delay-card {
+    padding: 15px;
+  }
+  
+  .delay-card h2 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--text-yellow);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  
+  /* =============================================
+     LEAFLET MAP CUSTOMIZATIONS
+     ============================================= */
+  .leaflet-container {
+    background: #0a1f16 !important;
+    font-family: var(--font-terminal) !important;
+  }
+  
+  .leaflet-control-zoom a {
+    background: var(--military-dark) !important;
+    color: var(--text-green) !important;
+    border: 1px solid var(--terminal-border) !important;
+  }
+  
+  .leaflet-tile {
+    filter: hue-rotate(190deg) saturate(0.7) brightness(0.8) invert(0.1) !important;
+  }
+  
+  /* =============================================
+     DARK MODE & THEME VARIANTS
+     ============================================= */
+  .App.dark-mode {
+    background-color: #050d0a;
+  }
+  
+  .App.dark-mode .leaflet-tile {
+    filter: hue-rotate(260deg) saturate(0.3) brightness(0.6) invert(0.2) !important;
+  }
+  
+  .App.night-vision {
+    background-color: #0a1a0a;
+    color: #77ff77;
+  }
+  
+  .App.night-vision .leaflet-tile {
+    filter: hue-rotate(260deg) saturate(0.3) brightness(0.6) invert(0.2) !important;
+  }
+  
+  .App.thermal {
+    background-color: #0a0a0f;
+  }
+  
+  .App.thermal .leaflet-tile {
+    filter: grayscale(1) contrast(1.5) !important;
+  }
+  
+  /* =============================================
+     CUSTOM SCROLLBAR
+     ============================================= */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--military-dark);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--military-light);
+    border-radius: 2px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--terminal-border);
+  }
+  
+  /* =============================================
+     ANIMATIONS
+     ============================================= */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  @keyframes alertPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  /* =============================================
+     RESPONSIVE DESIGN
+     ============================================= */
+  @media (max-width: 1200px) {
+    .dashboard-container {
+      flex-direction: column;
+    }
+    
+    .card, .delay-card {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+    }
+    
+    .header h1 {
+      font-size: 1.2rem;
+    }
+    
+    .failover-buttons {
+      flex-direction: column;
+    }
+    
+    .map-controls button {
+      flex-grow: 1;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .header h1 {
+      font-size: 1rem;
+    }
+    
+    #master-clock-time {
+      font-size: 1rem;
+    }
+    
+    .map-container, #gps-map, #bps-map {
+      height: 250px;
+    }
+    
+    .failover-buttons button {
+      width: 100%;
+    }
+  }
+  /* Make the main dashboard row a flex container */
+.dashboard-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px; /* Adjust spacing */
+  padding: 10px;
+}
+
+/* Each section (Clock, Status, Location) */
+.master-clock, .failover-status, .location-details {
+  flex: 1; /* Equal width */
+  min-width: 250px; /* Prevent items from being too small */
+}
+
+/* Make sure elements are aligned properly */
+.master-clock h3, .failover-status p, .location-details p {
+  margin-bottom: 8px;
+}
+
+/* Ensure tabs and maps remain separate */
+.tab-content {
+  margin-top: 15px;
+}
+
+/* Hide tabs when not active */
+.tab-content.hidden {
+  display: none;
+}
+
+/* Show the active tab */
+.tab-content.visible {
+  display: block;
+}
+
+/* Map container adjustments */
+.map-container {
+  width: 100%;
+  height: 300px;
+  border: 1px solid var(--terminal-border);
+  margin-top: 10px;
+  background-color: #0a1a14;
+}/* Enlarged Tabs for GPS/BPS */
+.large-tab {
+  font-size: 1.2rem; /* Bigger font */
+  padding: 12px 25px; /* More padding */
+  min-width: 120px; /* Ensures tabs are bigger */
+  text-align: center;
+  border-radius: 5px;
+}
+
+/* THEME STYLES */
+.App.theme-power {
+  background-color: #0d6dc7 !important;
+  background-image: none !important;
+  color: #00e5ff !important;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+  font-family: var(--font-power);
+}
+
+.App.theme-finance {
+  background-color: #d3dbbe !important;
+  background-image: none !important;
+  color: #333 !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+.App.theme-normal {
+  background-color: #1f46c5 !important;
+  background-image: none !important;
+  color: #000000 !important;
+  font-family: 'Arial', sans-serif;
+}
+
+.App.theme-military {
+  background-color: #0a2d1c !important;
+  /* Optionally, override background-image if needed */
+  background-image: var(--grid-background);
+  color: #44ff44 !important;
+  
+  font-family: var(--font-terminal);
+}
+
+
+/* Optional: style buttons */
+.theme-switcher button {
+  margin-right: 10px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #333;
+  color: white;
+}
+
+.theme-switcher button:hover {
+  background-color: #555;
+}
+/* ================================
+   HEADER STYLES BY THEME
+   ================================ */
+
+   .theme-military .header {
+    background: #0a1f16;
+    color: #44ff44;
+    border-bottom: 2px solid #ffb400;
+  }
+  
+  .theme-power .header {
+    background: #111111;
+    color:  #e010b3;
+    border-bottom: 2px solid #00ffcc;
+  }
+  
+  .theme-finance .header {
+    background: #f8f9fa;
+    color: #111;
+    border-bottom: 2px solid #3f51b5;
+  }
+  
+  .theme-normal .header {
+    background: #1a346b;
+    color:  #ffffff;
+    border-bottom: 2px solid #ffffff;
+  }
+  
+  /* Text styles for h1 and p inside header */
+  .theme-finance .header h1,
+  .theme-finance .header p {
+    color: #111;
+    text-shadow: none;
+  }
+  
+  .theme-power .header h1 {
+    color: #00ffcc;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  }
+  
+  .theme-military .header h1 {
+    color: #ffe74c;
+    text-shadow: var(--glow-green);
+  }
+  
+  .theme-normal .header h1 {
+    color: #ffffff;
+  }
+  
+
+/* Sector-Specific Panel Styles */
+.sector-specific-panel {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Military Theme Styles */
+.theme-military .sector-panel.military-panel {
+  background-color: rgba(0, 100, 0, 0.1);
+  border: 1px solid darkgreen;
+}
+
+.military-panel .tactical-alerts {
+  color: darkgreen;
+}
+
+.military-panel .indicator.alert {
+  color: red;
+  font-weight: bold;
+}
+
+/* Power Grid Theme Styles */
+.theme-power .sector-panel.power-grid-panel {
+  background-color: rgba(0, 0, 139, 0.1);
+  border: 1px solid darkblue;
+}
+
+.power-grid-panel .status-indicator.warning {
+  color: orange;
+  font-weight: bold;
+}
+
+/* Finance Theme Styles */
+.theme-finance .sector-panel.finance-panel {
+  background-color: rgba(255, 215, 0, 0.1);
+  border: 1px solid goldenrod;
+}
+
+.finance-panel .risk-indicator.high-risk {
+  color: red;
+  font-weight: bold;
+}
+
+/* Normal/Stakeholder Theme Styles */
+.theme-normal .sector-panel.stakeholder-panel {
+  background-color: rgba(200, 200, 200, 0.1);
+  border: 1px solid gray;
+}
