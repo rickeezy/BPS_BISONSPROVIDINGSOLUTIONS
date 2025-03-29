@@ -5,7 +5,6 @@ import L from "leaflet";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
-// Updated "locations" object with station names and extra keys
 const locations = {
   washingtonDC: {
     name: "WHUT-TV",
@@ -60,10 +59,33 @@ const locations = {
 };
 
 function App() {
-  // React states
+  // State declarations
+  const [theme, setTheme] = useState("power");
+  const [failoverMode, setFailoverMode] = useState("normal");
+  const [masterClock, setMasterClock] = useState("");
+  const [activeTab, setActiveTab] = useState("bps");
+  const [darkMode, setDarkMode] = useState(false);
+  const [gpsUnsyncedTime, setGpsUnsyncedTime] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [showDelayGraph, setShowDelayGraph] = useState(false);
+  const [bpsOffset, setBpsOffset] = useState(1);
+  const [eloranOffset, setEloranOffset] = useState(2);
+  const [bpsLocation, setBpsLocation] = useState(locations.washingtonDC);
+  const [scenario, setScenario] = useState(null);
   
+  // Chart data states
+  const [chartData, setChartData] = useState(
+    Array.from({length: 20}, () => Math.floor(Math.random() * 100))
+  );
+  const [chartLabels, setChartLabels] = useState(
+    Array.from({length: 20}, (_,i) => `${i+1}s`)
+  );
 
-  const [scenario, setScenario] = useState("null");
+  // Refs
+  const bpsMapRef = useRef(null);
+  const chartRef = useRef(null);
+  const chartContainerRef = useRef(null);
+
   const scenarioAlerts = {
     urban: "🏙️ Urban Canyon: GPS signals may bounce or weaken — BPS is more stable.",
     underground: "🚇 Underground/Tunnel: GPS unavailable — BPS and eLoran operational.",
@@ -71,24 +93,84 @@ function App() {
     military: "🛡️ Military GPS Denial Zone: GPS restricted — BPS fallback activated.",
     disaster: "🌪️ Natural Disaster: Satellite communication may fail — BPS maintains local sync.",
   };
-  function handleScenario(type) {
-    setScenario(type === "normal" ? null : type);
-    if (type === "urban") activateJammingMode();
-    else if (["underground", "solar", "military", "disaster"].includes(type)) activateUnavailableMode();
-    else restoreNormalMode();
-  }
 
-  const [theme, setTheme] = useState("normal");
-  
+  // Initialize chart
+  useEffect(() => {
+    const ctx = document.getElementById('delayGraph');
+    if (ctx && !chartRef.current) {
+      // Ensure canvas is properly sized
+      ctx.style.width = '100%';
+      ctx.style.height = '100%';
+      
+      chartRef.current = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: chartLabels,
+          datasets: [{
+            label: 'Delay (ns)',
+            data: chartData,
+            borderColor: 'rgb(74, 255, 160)',
+            backgroundColor: 'rgba(74, 255, 160, 0.1)',
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 0 // disable animations for better performance
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              grid: { color: 'rgba(74, 255, 160, 0.1)' },
+              ticks: { color: 'var(--text-green)' }
+            },
+            x: {
+              grid: { color: 'rgba(74, 255, 160, 0.1)' },
+              ticks: { color: 'var(--text-green)' }
+            }
+          }
+        }
+      });
+    }
 
-  const [failoverMode, setFailoverMode] = useState("normal"); // "normal", "jamming", "unavailable"
-  const [masterClock, setMasterClock] = useState("");
-  const [activeTab, setActiveTab] = useState("gps");
-  const [darkMode, setDarkMode] = useState(false);
-  
-  const [gpsUnsyncedTime, setGpsUnsyncedTime] = useState(null);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  // Update currentTime every second (for unsynced counter)
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = null;
+      }
+    };
+  }, []);
+
+  // Update chart data
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (chartRef.current) {
+        const newValue = Math.floor(10 + Math.random() * 90);
+        const newLabel = `${chartLabels.length + 1}s`;
+        
+        // Create new arrays instead of mutating
+        const newData = [...chartData.slice(1), newValue];
+        const newLabels = [...chartLabels.slice(1), newLabel];
+        
+        // Update state
+        setChartData(newData);
+        setChartLabels(newLabels);
+        
+        // Directly update chart
+        chartRef.current.data.datasets[0].data = newData;
+        chartRef.current.data.labels = newLabels;
+        chartRef.current.update();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [chartData, chartLabels]);
+
+  // Update currentTime every second
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -96,14 +178,111 @@ function App() {
     return () => clearInterval(interval);
   }, []);
   
-  // Default both to Washington DC at first
-  const [bpsLocation, setBpsLocation] = useState(locations.washingtonDC);
+  // Update offsets dynamically
+  useEffect(() => {
+    const offsetInterval = setInterval(() => {
+      // Base values between 2-22ns
+      setBpsOffset(Math.floor(2 + Math.random() * 20));
+      setEloranOffset(Math.floor(2 + Math.random() * 20));
+      
+      // Different ranges per station
+      if (bpsLocation.name === "WHUT-TV") {
+        setBpsOffset(Math.floor(2 + Math.random() * 20));
+      } else if (bpsLocation.name === "KWGN-TV") {
+        setBpsOffset(Math.floor(10 + Math.random() * 15)); // 10-25ns
+      } else {
+        setBpsOffset(Math.floor(12 + Math.random() * 18)); // 12-30ns
+      }
+    }, 1000);
+    
+    return () => clearInterval(offsetInterval);
+  }, [bpsLocation]);
+
+  // Initialize Leaflet maps
+  useEffect(() => {
+    const initMaps = () => {
+      const bpsContainer = document.getElementById("bps-map");
+      if (bpsContainer && !bpsMapRef.current) {
+        bpsMapRef.current = L.map("bps-map").setView(
+          [bpsLocation.lat, bpsLocation.lng],
+          bpsLocation.zoom
+        );
+        
+        function getTileLayerByTheme(theme) {
+          switch (theme) {
+            case "power":
+              return "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+            case "finance":
+              return "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png";
+            case "normal":
+              return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+            case "military":
+            default:
+              return "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
+          }
+        }
+        
+        L.tileLayer(getTileLayerByTheme(theme), {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(bpsMapRef.current);
+        
+        // Add markers for each BPS station
+        Object.values(locations).forEach(location => {
+          const isCurrent = location.name === bpsLocation.name;
+          
+          L.marker([location.lat, location.lng], {
+            icon: L.divIcon({
+              className: `bps-marker ${isCurrent ? 'active' : ''}`,
+              html: `<div>${location.name}</div>`,
+              iconSize: [30, 30]
+            })
+          })
+          .bindPopup(`
+            <strong>${location.name}</strong><br>
+            ${location.street}<br>
+            ${location.locality}<br>
+            Typical offset: ${location.name === "WHUT-TV" ? "2-22ns" : 
+                            location.name === "KWGN-TV" ? "10-25ns" : "12-30ns"}
+          `)
+          .addTo(bpsMapRef.current);
+        });
+        
+        addBpsPolygonCoverage(bpsMapRef.current);
+      }
+    };
+    initMaps();
+    
+    return () => {
+      if (bpsMapRef.current) {
+        bpsMapRef.current.remove();
+        bpsMapRef.current = null;
+      }
+    };
+  }, [theme, bpsLocation]);
+
+  // Update the master clock every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      const gmt = `${String(now.getUTCHours()).padStart(2, "0")}:${String(
+        now.getUTCMinutes()
+      ).padStart(2, "0")}:${String(now.getUTCSeconds()).padStart(2, "0")} GMT`;
+      setMasterClock(gmt);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Theme persistence
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") setDarkMode(true);
+  }, []);
   
-  // Refs to store map and chart instances
-  const bpsMapRef = useRef(null);
-  const chartRef = useRef(null);
-  
-  // Function to add polygon coverage from your GeoJSON file
+  useEffect(() => {
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
+  // Helper functions
   function addBpsPolygonCoverage(map) {
     fetch("/bpsStations.geojson")
       .then((response) => response.json())
@@ -123,131 +302,11 @@ function App() {
       })
       .catch((err) => console.error("Error loading BPS GeoJSON:", err));
   }
-  
-  // Initialize Leaflet maps once after component mounts
-  useEffect(() => {
-    const initMaps = () => {
-  
-      const bpsContainer = document.getElementById("bps-map");
-      if (bpsContainer && !bpsMapRef.current) {
-        bpsMapRef.current = L.map("bps-map").setView(
-          [locations.washingtonDC.lat, locations.washingtonDC.lng],
-          locations.washingtonDC.zoom
-        );
-        function getTileLayerByTheme(theme) {
-          switch (theme) {
-            case "power":
-              return "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"; // Dark electric grid look
-            case "finance":
-              return "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"; // Clean and minimal
-            case "normal":
-              return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"; // Default
-            case "military":
-            default:
-              return "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"; // Tactical styled map (HOT)
-          }
-        }
-        L.tileLayer(getTileLayerByTheme(theme), {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(bpsMapRef.current);
-        
-                // Add polygon coverage to the BPS map
-        addBpsPolygonCoverage(bpsMapRef.current);
-      }
-    };
-    initMaps();
-  
-    // Cleanup on unmount
-    return () => {
-      if (bpsMapRef.current) {
-        bpsMapRef.current.remove();
-        bpsMapRef.current = null;
-      }
-    };
-  }, [theme]);
-  
-  // Initialize and update Chart.js chart with real-time simulation
-useEffect(() => {
-  const ctx = document.getElementById("delayGraph");
-  if (ctx && !chartRef.current) {
-    // Set initial number of data points
-    const initialDataPoints = 20;
-    const initialLabels = Array.from({ length: initialDataPoints }, (_, i) => `${i + 1}s`);
-    const initialData = Array.from({ length: initialDataPoints }, () => Math.floor(150 + Math.random() * 100));
 
-    // Create the chart
-    chartRef.current = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: initialLabels,
-        datasets: [
-          {
-            label: "Delay in Nanoseconds",
-            data: initialData,
-            fill: false,
-            borderColor: "rgb(75, 192, 192)",
-            tension: 0.1,
-          },
-        ],
-      },
-      options: {
-        animation: false,
-        scales: {
-          y: { beginAtZero: true, title: { display: true, text: "Delay (ns)" } },
-          x: { title: { display: true, text: "Time" } },
-        },
-      },
-    });
-
-    // Update the chart every second with a new data point
-    const updateInterval = setInterval(() => {
-      if (chartRef.current) {
-        // Create a new label (e.g., "21s", "22s", etc.)
-        const newLabel = `${chartRef.current.data.labels.length + 1}s`;
-        // Remove the first label and push the new one
-        chartRef.current.data.labels.shift();
-        chartRef.current.data.labels.push(newLabel);
-
-        // Remove the first data point and add a new random one
-        chartRef.current.data.datasets[0].data.shift();
-        const newDataPoint = Math.floor(100 + Math.random() * 150);
-        chartRef.current.data.datasets[0].data.push(newDataPoint);
-
-        chartRef.current.update();
-      }
-    }, 1000);
-
-    return () => clearInterval(updateInterval);
-  }
-}, []);
-  
-  // Update the master clock every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      const gmt = `${String(now.getUTCHours()).padStart(2, "0")}:${String(
-        now.getUTCMinutes()
-      ).padStart(2, "0")}:${String(now.getUTCSeconds()).padStart(2, "0")} GMT`;
-      setMasterClock(gmt);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-  
-  // Load/persist dark mode preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") setDarkMode(true);
-  }, []);
-  useEffect(() => {
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
-  
-  // Function to change location (updates both state and map view)
   function changeLocation(locationKey, system) {
     const loc = locations[locationKey];
     if (!loc) return;
-  
+
     if (system === "bps") {
       setBpsLocation(loc);
       if (bpsMapRef.current) {
@@ -255,28 +314,35 @@ useEffect(() => {
       }
     }
   }
-  
-  // Helper: Calculate seconds since a given date
+
   function getSecondsSince(date) {
     if (!date) return 0;
     return Math.floor((currentTime - date) / 1000);
   }
-  
+
   // Failover mode handlers
   function activateJammingMode() {
     setFailoverMode("jamming");
     setGpsUnsyncedTime(new Date());
   }
+  
   function activateUnavailableMode() {
     setFailoverMode("unavailable");
     setGpsUnsyncedTime(new Date());
   }
+  
   function restoreNormalMode() {
     setFailoverMode("normal");
     setGpsUnsyncedTime(null);
   }
-  
-  // Handle tab switching and refresh maps/charts
+
+  function handleScenario(type) {
+    setScenario(type === "normal" ? null : type);
+    if (type === "urban") activateJammingMode();
+    else if (["underground", "solar", "military", "disaster"].includes(type)) activateUnavailableMode();
+    else restoreNormalMode();
+  }
+
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
     setTimeout(() => {
@@ -285,7 +351,7 @@ useEffect(() => {
     }, 100);
   };
 
-  // NEW: Sector-Specific Panels
+  // Sector-Specific Panels
   const MilitaryPanel = () => (
     <div className="sector-panel military-panel">
       <div className="tactical-alerts">
@@ -348,7 +414,6 @@ useEffect(() => {
     </div>
   );
 
-  
   // Derived UI text based on failover mode
   let gpsSyncText = "ACTIVE";
   let gpsSyncColor = "green";
@@ -356,6 +421,7 @@ useEffect(() => {
   let bpsSyncColor = "green";
   let failoverAlertText = "";
   let showFailoverAlert = false;
+  
   if (failoverMode === "jamming") {
     failoverAlertText = "⚠️ GPS Jamming Detected: Failover Mode Active";
     showFailoverAlert = true;
@@ -373,36 +439,35 @@ useEffect(() => {
     bpsSyncText = "ACTIVE (Failover)";
     bpsSyncColor = "green";
   }
-  
+
   return (
-      <div className={`App ${darkMode ? "dark-mode" : ""} theme-${theme}`}>
-  
-        {/* Theme Switcher Buttons */}
-        <div className="theme-switcher" style={{ marginBottom: "15px" }}>
-          <button onClick={() => setTheme("military")}>🎖️ Military</button>
-          <button onClick={() => setTheme("power")}>⚡ Power Grid</button>
-          <button onClick={() => setTheme("finance")}>💰 Finance</button>
-          <button onClick={() => setTheme("normal")}>👥 Normal</button>
-        </div>
-  
-        <div className="container">
-          {/* Header, alerts, and the rest of your dashboard */}
-          <div className="header">
+    <div className={`App ${darkMode ? "dark-mode" : ""} theme-${theme}`}>
+      {/* Theme Switcher Buttons */}
+      <div className="theme-switcher" style={{ marginBottom: "15px" }}>
+        <button onClick={() => setTheme("military")}>🎖️ Military</button>
+        <button onClick={() => setTheme("power")}>⚡ Power Grid</button>
+        <button onClick={() => setTheme("finance")}>💰 Finance</button>
+        <button onClick={() => setTheme("normal")}>👥 Normal</button>
+      </div>
+
+      <div className="container">
+        {/* Header */}
+        <div className="header">
           <h1>
             {theme === "military" && " Military Command Dashboard"}
             {theme === "power" && " Power Grid Synchronization"}
             {theme === "finance" && " Financial Sync Control Center"}
             {theme === "normal" && " Standard Stakeholder Dashboard"}
           </h1>
+          <p>
+            {theme === "military" && "Optimized for tactical field operations."}
+            {theme === "power" && "Monitoring grid-wide time synchronization and reliability."}
+            {theme === "finance" && "Tracking time-critical transactions and network trust."}
+            {theme === "normal" && "Real-time visualization for all stakeholders."}
+          </p>
+        </div>
 
-            <p>
-              {theme === "military" && "Optimized for tactical field operations."}
-              {theme === "power" && "Monitoring grid-wide time synchronization and reliability."}
-              {theme === "finance" && "Tracking time-critical transactions and network trust."}
-              {theme === "normal" && "Real-time visualization for all stakeholders."}
-            </p>
-          </div>
-  
+        {/* Alerts */}
         {showFailoverAlert && (
           <div id="failover-alert" className="failover-alert">
             <p>{failoverAlertText}</p>
@@ -415,21 +480,20 @@ useEffect(() => {
           </div>
         )}
 
-  
         {/* Main Card */}
         <div className="card">
           {theme === "military" && <MilitaryPanel />}
           {theme === "power" && <PowerGridPanel />}
           {theme === "finance" && <FinancePanel />}
           {theme === "normal" && <StakeholderPanel />}
-        <div className="dashboard-row">
-          {/* Master Clock Section */}
-          <div className="master-clock">
-            {/* <h3></h3> */}
-            <p id="master-clock-time">{masterClock || "Loading..."}</p>
-          </div>
+          
+          <div className="dashboard-row">
+            {/* Master Clock Section */}
+            <div className="master-clock">
+              <p id="master-clock-time">{masterClock || "Loading..."}</p>
+            </div>
 
-          <div className="sync-details">
+            <div className="sync-details">
               <p>
                 GPS:{" "}
                 <span style={{ color: gpsSyncColor, fontWeight: "bold" }}>
@@ -442,78 +506,98 @@ useEffect(() => {
                   {bpsSyncText}
                 </span>
                 {"    Sync: "}
-                <span id="bps-offset">1ns</span>
+                <span 
+                  className="clickable-sync"
+                  onClick={() => setShowDelayGraph(!showDelayGraph)}
+                >
+                  {bpsOffset}ns
+                </span>
               </p>
               <p>
                 eLoran:{" "}
-                <span id="eloran-sync" className="status-active">
-                  ACTIVE
-                </span>
+                <span className="status-active">ACTIVE</span>
                 {"     Sync: "}
-                <span id="eloran-offset">2ns</span>
+                <span 
+                  className="clickable-sync"
+                  onClick={() => setShowDelayGraph(!showDelayGraph)}
+                >
+                  {eloranOffset}ns
+                </span>
               </p>
             </div>
 
-
-
-
-          {/* Location Details Section */}
-          <div className="location-details">
-            <p>Locality: Las Vegas, NV, US </p>
-            <p>Zip: 81901</p>
-            <p>Street: Las Vegas Convention Center</p>
-          </div>
-        </div>
-            
-          <div className="failover-readiness">
-              <p></p>
-              <span className={`readiness-bubble ${failoverMode === "normal" ? "stable" : "active"}`}>
-                {failoverMode === "normal" ? "Stable" : "Failover Active"}
-              </span>
-            </div>
-        {/* Tabs - Enlarged */}
-        <div className="tabs">
-          <button className="tab large-tab" onClick={() => handleTabClick("bps")}>
-            BPS
-          </button>
-        </div>
-
-
-            {/* BPS Tab */}
-            <div
-              id="bps"
-              className="tab-content"
-              style={{ display: activeTab === "bps" ? "block" : "none" }}
-            >
-              <p>Country: {bpsLocation.country}</p>
+            {/* Location Details Section */}
+            <div className="location-details">
               <p>Locality: {bpsLocation.locality}</p>
               <p>Zip: {bpsLocation.zip}</p>
               <p>Street: {bpsLocation.street}</p>
-  
-              <div className="map-controls">
-                <button onClick={() => changeLocation("washingtonDC", "bps")}>
-                  {locations.washingtonDC.name}
-                </button>
-                <button onClick={() => changeLocation("colorado", "bps")}>
-                  {locations.colorado.name}
-                </button>
-                <button onClick={() => changeLocation("baltimore", "bps")}>
-                  {locations.baltimore.name}
-                </button>
-                <button onClick={() => changeLocation("lasVegas", "bps")}>
-                  {locations.lasVegas.name}
-                </button>
-                <button onClick={() => changeLocation("stationX", "bps")}>
-                  {locations.stationX.name}
-                </button>
-              </div>
-              <div id="bps-map" style={{ width: "100%", height: "300px" }}></div>
             </div>
-  
-            {/* Failover Buttons */}
-            <div className="failover-buttons">
-              <button onClick={activateJammingMode}>🔴 Simulate GPS Jamming</button>
-              <button onClick={activateUnavailableMode}>⚠️ Simulate GPS Unavailable</button>
+          </div>
+          
+          <div className="failover-readiness">
+            <p></p>
+            <span className={`readiness-bubble ${failoverMode === "normal" ? "stable" : "active"}`}>
+              {failoverMode === "normal" ? "Stable" : "Failover Active"}
+            </span>
+          </div>
+
+          {/* Tabs */}
+          <div className="tabs">
+            <button className="tab large-tab" onClick={() => handleTabClick("bps")}>
+              BPS
+            </button>
+          </div>
+
+          {/* BPS Tab */}
+          <div
+            id="bps"
+            className="tab-content"
+            style={{ display: activeTab === "bps" ? "block" : "none" }}
+          >
+            <p>Country: {bpsLocation.country}</p>
+            <p>Locality: {bpsLocation.locality}</p>
+            <p>Zip: {bpsLocation.zip}</p>
+            <p>Street: {bpsLocation.street}</p>
+
+            <div className="map-controls">
+              <button onClick={() => changeLocation("washingtonDC", "bps")}>
+                {locations.washingtonDC.name}
+              </button>
+              <button onClick={() => changeLocation("colorado", "bps")}>
+                {locations.colorado.name}
+              </button>
+              <button onClick={() => changeLocation("baltimore", "bps")}>
+                {locations.baltimore.name}
+              </button>
+              <button onClick={() => changeLocation("lasVegas", "bps")}>
+                {locations.lasVegas.name}
+              </button>
+              <button onClick={() => changeLocation("stationX", "bps")}>
+                {locations.stationX.name}
+              </button>
+            </div>
+            <div id="bps-map" style={{ width: "100%", height: "300px" }}></div>
+          </div>
+
+          {/* Delay Graph */}
+          {showDelayGraph && (
+            <div className="delay-card">
+              <h2>DELAY ANALYSIS (LAST HOUR)</h2>
+              <div className="chart-container" ref={chartContainerRef}>
+                <canvas 
+                  id="delayGraph"
+                  width="400" 
+                  height="400"
+                ></canvas>
+              </div>
+            </div>
+          )}
+
+          {/* Failover Buttons */}
+          <div className="failover-buttons">
+            <button onClick={activateJammingMode}>🔴 Simulate GPS Jamming</button>
+            <button onClick={activateUnavailableMode}>⚠️ Simulate GPS Unavailable</button>
+          
             {/* Scenario Simulation Buttons */}
             <div className="failover-buttons scenario-buttons" style={{ marginTop: '15px', flexWrap: 'wrap', gap: '10px' }}>
               <button onClick={() => handleScenario('urban')}>🏙️ Urban Canyon</button>
@@ -523,24 +607,11 @@ useEffect(() => {
               <button onClick={() => handleScenario('disaster')}>🌪️ Natural Disaster</button>
               <button onClick={() => handleScenario('normal')}>✅ Restore Normal Mode</button>
             </div>
-            </div>
           </div>
         </div>
-  
-        {/* Delay Graph Card */}
-        {/* Delay Graph - Hidden by Default */}
-        {activeTab === "delay" && (
-          <div className="delay-card">
-            <h2>Delay Analysis</h2>
-            <canvas id="delayGraph" style={{ width: "100%", height: "300px" }} />
-          </div>
-        )}
-
-      
-
-
-</div>
+      </div>
+    </div>
   );
 }
-  
+
 export default App;
