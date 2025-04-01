@@ -1,0 +1,1514 @@
+/* 
+ * BPS Broadcast Positioning Dashboard - App.css 
+ * Consolidated and optimized version
+ */
+
+/* =====================
+   FONT IMPORTS
+   ===================== */
+   @import url('https://fonts.googleapis.com/css2?family=Agency+FB&family=Franklin+Gothic+Condensed&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Share+Tech&family=Rajdhani:wght@400;500&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Roboto+Condensed:wght@400;700&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700&family=Quantico:wght@400;700&display=swap');
+   
+/* =====================
+   MILITARY THEME STYLES
+   ===================== */
+   .App.theme-military {
+    /* Color Palette */
+    --primary: #2a3439;       /* Deep slate gray */
+    --secondary: #556B2F;     /* Olive green (darkened for better contrast) */
+    --tertiary: #CD853F;      /* Muted bronze (peruvian tan) */
+    --accent: #B22222;        /* Tactical red (firebrick) */
+    --text-primary: #e0e0e0;
+    --text-secondary: #ffffff;
+    
+    /* Typography */
+    font-family: 'Agency FB', 'Franklin Gothic Condensed', sans-serif;
+    letter-spacing: 0.5px;
+    
+    /* Background with topo/grid overlay */
+    background-color: var(--primary);
+    background-image: 
+      linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none'/%3E%3Cpath d='M20 20L80 20M20 40L80 40M20 60L80 60M20 80L80 80M20 20L20 80M40 20L40 80M60 20L60 80M80 20L80 80' stroke='%23556B2F' stroke-width='0.3'/%3E%3C/svg%3E");
+  }
+  /* =====================
+   POWER GRID THEME STYLES
+   ===================== */
+.App.theme-power {
+  /* Color Palette */
+  --primary: #0039a6;       /* Electric blue */
+  --secondary: #2a0a5e;     /* Deep indigo */
+  --tertiary: #c0c0c0;      /* Metallic silver */
+  --accent: #ff005d;        /* High-voltage yellow */
+  --text-primary: #e6f7ff;
+  --text-secondary: #ffffff;
+  
+  /* Typography */
+  font-family: 'Share Tech', 'Rajdhani', sans-serif;
+  letter-spacing: 0.3px;
+  
+  /* Circuit board background */
+  background-color: var(--primary);
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none'/%3E%3Cpath d='M20 20h20v20H20zM60 20h20v20H60zM20 60h20v20H20zM60 60h20v20H60zM40 40h20v20H40z' stroke='%23c0c0c0' stroke-width='0.5' fill='none'/%3E%3Cpath d='M40 20v20M60 40v20M20 40h20M60 60h20M40 80v-20M20 60v-20M80 40v20' stroke='%230039a6' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+/* Header */
+.theme-power .header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: 1px solid var(--tertiary);
+  border-bottom: 3px solid var(--accent);
+  color: var(--text-primary);
+}
+
+.theme-power .header h1 {
+  font-family: 'Share Tech', sans-serif;
+  font-weight: 400;
+  color: var(--tertiary);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+  letter-spacing: 1.5px;
+}
+
+/* Cards */
+.theme-power .card {
+  background-color: rgba(0, 57, 166, 0.85);
+  border: 1px solid var(--tertiary);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Status Indicators */
+.theme-power .status-active {
+  color: var(--accent);
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.theme-power .failover-alert {
+  background-color: rgba(255, 215, 0, 0.15);
+  border-left: 4px solid var(--accent);
+  color: var(--text-primary);
+  font-weight: bold;
+}
+
+/* Buttons */
+.theme-power button {
+  background: linear-gradient(to bottom, #1a4b8c, var(--primary));
+  border: 1px solid var(--tertiary);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  padding: 8px 15px 8px 30px;
+  position: relative;
+  text-transform: uppercase;
+}
+/* =====================
+   NORMAL THEME STYLES 
+   ===================== */
+   .App.theme-normal {
+    /* (Previous normal theme styles remain unchanged) */
+  }
+  
+  /* Location and Station Info Styling */
+  .theme-normal .location-details,
+  .theme-normal .tab-content p {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  
+  /* BPS Buttons Styling */
+  .theme-normal .map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin: 8px 0;
+  }
+  
+  .theme-normal .map-controls button {
+    padding: 2px 6px !important;      /* Ultra-compact padding */
+    font-size: 0.65rem !important;    /* Very small text */
+    height: 22px !important;          /* Fixed minimal height */
+    min-width: 60px !important;       /* Minimum width */
+    margin: 0 2px !important;         /* Tight spacing */
+  }
+  
+  
+/* =====================
+   FINANCIAL THEME STYLES
+   ===================== */
+
+  .App.theme-finance {
+    /* Color Palette */
+    --primary: #001a3f;       /* Deep navy */
+    --secondary: #3d3d3d;     /* Graphite gray */
+    --tertiary: #e5e4e2;      /* Platinum */
+    --accent-positive: #00a86b; /* Calculated green */
+    --accent-negative: #d62828; /* Cautionary red */
+    --text-primary: #333333;
+    --text-secondary: #ffffff;
+    
+    /* Typography */
+    font-family: 'Playfair Display', 'Roboto Condensed', serif;
+    
+    /* Background with data graph watermark */
+    background-color: var(--tertiary);
+    background-image: 
+      linear-gradient(rgba(229, 228, 226, 0.9), rgba(229, 228, 226, 0.9)),
+      url("data:image/svg+xml,%3Csvg width='120' height='80' viewBox='0 0 120 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 60L30 30L50 50L70 10L90 40L110 20' stroke='%23001a3f' stroke-width='0.3' fill='none' stroke-dasharray='2 2'/%3E%3Cpath d='M10 70L30 40L50 70L70 30L90 60L110 10' stroke='%233d3d3d' stroke-width='0.3' fill='none' opacity='0.7'/%3E%3C/svg%3E");
+  }
+  
+  /* Location Text Styling */
+  .theme-finance .location-details {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--secondary);
+  }
+  
+  /* BPS Buttons Styling */
+  .theme-finance .map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+  }
+  
+  .theme-finance .map-controls button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    min-width: auto;
+    background: white;
+    border: 1px solid var(--secondary);
+    color: var(--text-primary);
+    font-family: 'Roboto Condensed', sans-serif;
+  }
+  
+  .theme-finance .map-controls button:hover {
+    background: #f5f5f5;
+  }
+
+.App.theme-finance {
+  /* Color Palette */
+  --primary: #001a3f;       /* Deep navy */
+  --secondary: #3d3d3d;     /* Graphite gray */
+  --tertiary: #e5e4e2;      /* Platinum */
+  --accent-positive: #00a86b; /* Calculated green */
+  --accent-negative: #d62828; /* Cautionary red */
+  --text-primary: #333333;
+  --text-secondary: #ffffff;
+  
+  /* Typography */
+  font-family: 'Playfair Display', 'Roboto Condensed', serif;
+  
+  /* Background with data graph watermark */
+  background-color: var(--tertiary);
+  background-image: 
+    linear-gradient(rgba(229, 228, 226, 0.9), rgba(229, 228, 226, 0.9)),
+    url("data:image/svg+xml,%3Csvg width='120' height='80' viewBox='0 0 120 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 60L30 30L50 50L70 10L90 40L110 20' stroke='%23001a3f' stroke-width='0.3' fill='none' stroke-dasharray='2 2'/%3E%3Cpath d='M10 70L30 40L50 70L70 30L90 60L110 10' stroke='%233d3d3d' stroke-width='0.3' fill='none' opacity='0.7'/%3E%3C/svg%3E");
+}
+
+/* Header */
+.theme-finance .header {
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  border-bottom: 3px solid var(--tertiary);
+  color: var(--tertiary);
+}
+
+.theme-finance .header h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--tertiary);
+}
+
+/* Cards */
+.theme-finance .card {
+  background-color: white;
+  border: 1px solid var(--secondary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Status Indicators */
+.theme-finance .status-active {
+  color: var(--accent-positive);
+  font-weight: bold;
+}
+
+.theme-finance .failover-alert {
+  background-color: rgba(214, 40, 40, 0.08);
+  border-left: 4px solid var(--accent-negative);
+  color: var(--accent-negative);
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Buttons */
+.theme-finance button {
+  background: white;
+  border: 1px solid var(--secondary);
+  color: var(--text-primary);
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+  padding: 8px 15px 8px 35px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Financial Icons */
+.theme-finance button::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+}
+
+/* Different icons for different button types */
+.theme-finance button[onclick*="Jamming"]::before {
+  /* Alert icon */
+  content: "⚠";
+  color: var(--accent-negative);
+  font-size: 1.2rem;
+}
+
+.theme-finance button[onclick*="Unavailable"]::before {
+  /* Warning icon */
+  content: "❗";
+  color: var(--accent-negative);
+}
+
+.theme-finance button[onclick*="Scenario"]::before {
+  /* Graph icon */
+  content: "📈";
+  font-size: 0.9rem;
+}
+
+.theme-finance button[onclick*="Normal"]::before {
+  /* Checkmark icon */
+  content: "✓";
+  color: var(--accent-positive);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* Tabs */
+.theme-finance .tabs {
+  border-bottom: 1px solid var(--tertiary);
+}
+
+.theme-finance .tab {
+  background: white;
+  border: 4px solid var(--tertiary);
+  border-bottom: none;
+  color: var(--text-primary);
+}
+
+.theme-finance .tab:hover {
+  background: rgba(115, 181, 232, 0.919);
+}
+
+/* Map Styling */
+.theme-finance .leaflet-container {
+  background-color: white !important;
+  border: 1px solid var(--tertiary) !important;
+}
+
+.theme-finance .leaflet-control-zoom a {
+  background-color: white !important;
+  color: var(--secondary) !important;
+  border: 1px solid var(--tertiary) !important;
+}
+
+/* Chart Styling */
+.theme-finance #delayGraph {
+  border: 1px solid var(--tertiary);
+  background-color: white;
+}
+
+/* Readiness Bubble */
+.theme-finance .readiness-bubble.stable {
+  background-color: rgba(0, 168, 107, 0.1);
+  border: 1px solid var(--accent-positive);
+  color: var(--accent-positive);
+}
+
+.theme-finance .readiness-bubble.active {
+  background-color: rgba(214, 40, 40, 0.1);
+  border: 1px solid var(--accent-negative);
+  color: var(--accent-negative);
+}
+
+/* Master Clock */
+.theme-finance #master-clock-time {
+  color: var(--primary);
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+}
+
+/* Sync Details */
+.theme-finance .sync-details {
+  color: var(--text-primary);
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.theme-finance .sync-details .status-active {
+  color: var(--accent-positive);
+}
+
+/* Financial Panel Specifics */
+.theme-finance .finance-panel {
+  background: white;
+  border-left: 4px solid var(--primary);
+}
+
+.theme-finance .finance-panel h3 {
+  color: var(--primary);
+  border-bottom: 1px solid var(--tertiary);
+  padding-bottom: 8px;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Animation for positive/negative changes */
+@keyframes pulsePositive {
+  0% { background-color: white; }
+  50% { background-color: rgba(0, 168, 107, 0.05); }
+  100% { background-color: white; }
+}
+
+@keyframes pulseNegative {
+  0% { background-color: white; }
+  50% { background-color: rgba(214, 40, 40, 0.05); }
+  100% { background-color: white; }
+}
+
+.theme-finance .sync-details p:nth-child(1) {
+  animation: pulsePositive 3s infinite;
+}
+
+.theme-finance .sync-details p:nth-child(2) {
+  animation: pulseNegative 3s infinite 1.5s;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .theme-finance button {
+    padding-left: 30px;
+  }
+  
+  .theme-finance button::before {
+    left: 8px;
+  }
+}
+.theme-normal .stakeholder-panel,
+.theme-normal .stakeholder-panel * {
+  font-family: 'Nunito Sans', sans-serif !important;
+}
+
+.theme-normal .stakeholder-panel h3 {
+  font-family: 'Open Sans', sans-serif !important;
+  font-weight: 600;
+  font-size: 1.1rem !important;
+}
+
+.theme-normal .stakeholder-panel p {
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+}
+/* =====================
+   MEDIA QUERIES
+   ===================== */
+   @media (max-width: 768px) {
+    .theme-finance .map-controls button {
+      font-size: 0.65rem !important;
+      padding: 4px 8px !important;
+      height: 24px !important;
+      min-width: 65px !important;
+    }
+  }
+/* Tabs */
+.theme-power .tabs {
+  border-bottom: 1px solid var(--tertiary);
+}
+
+.theme-power .tab {
+  background: var(--primary);
+  border: 1px solid var(--tertiary);
+  border-bottom: none;
+  color: var(--text-primary);
+}
+
+.theme-power .tab:hover {
+  background: rgba(255, 215, 0, 0.1);
+}
+
+/* Map Styling */
+.theme-power .leaflet-container {
+  background-color: #001a4d !important;
+}
+
+.theme-power .leaflet-control-zoom a {
+  background-color: var(--secondary) !important;
+  color: var(--tertiary) !important;
+  border: 1px solid var(--tertiary) !important;
+}
+
+/* Chart Styling */
+.theme-power #delayGraph {
+  border: 1px solid var(--tertiary);
+  background-color: var(--secondary);
+}
+
+/* Readiness Bubble */
+.theme-power .readiness-bubble.stable {
+  background-color: rgba(0, 57, 166, 0.3);
+  border: 1px solid var(--tertiary);
+  color: var(--tertiary);
+}
+
+.theme-power .readiness-bubble.active {
+  background-color: rgba(255, 215, 0, 0.3);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+/* Master Clock */
+.theme-power #master-clock-time {
+  color: var(--accent);
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+}
+
+/* Sync Details */
+.theme-power .sync-details {
+  color: var(--text-primary);
+}
+
+.theme-power .sync-details span {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+/* Special Pulse Animation for Power Grid */
+@keyframes powerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; text-shadow: 0 0 10px var(--accent); }
+}
+
+.theme-power .status-active {
+  animation: powerPulse 2s infinite;
+}
+
+/* Connection Lines Effect */
+.theme-power .dashboard-row {
+  position: relative;
+}
+
+.theme-power .dashboard-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--tertiary) 20%, 
+    var(--accent) 50%, 
+    var(--tertiary) 80%, 
+    transparent 100%);
+  opacity: 0.5;
+}
+  /* Header */
+  .theme-military .header {
+    background: linear-gradient(135deg, var(--primary), #1e2a2e);
+    border: 1px solid var(--tertiary);
+    border-bottom: 3px solid var(--secondary);
+    color: var(--text-primary);
+  }
+  
+  .theme-military .header h1 {
+    font-family: 'Agency FB', sans-serif;
+    font-weight: 700;
+    color: var(--tertiary);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    letter-spacing: 1px;
+  }
+  
+  /* Cards */
+  .theme-military .card {
+    background-color: rgba(42, 52, 57, 0.9);
+    border: 1px solid var(--tertiary);
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  }
+  
+  /* Status Indicators */
+  .theme-military .status-active {
+    color: var(--secondary);
+    font-weight: bold;
+  }
+  
+  .theme-military .failover-alert {
+    background-color: rgba(178, 34, 34, 0.15);
+    border-left: 4px solid var(--accent);
+    color: var(--text-primary);
+    font-weight: bold;
+  }
+  
+  /* Buttons */
+  .theme-military button {
+    background: linear-gradient(to bottom, #3a4a3f, var(--primary));
+    border: 1px solid var(--tertiary);
+    color: var(--text-primary);
+    font-family: 'Agency FB', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.8px;
+    padding: 8px 15px 8px 30px;
+    position: relative;
+    text-transform: uppercase;
+  }
+  
+  /* Military Icons (CSS-generated) */
+  .theme-military button::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    background-color: var(--tertiary);
+    clip-path: polygon(
+      50% 0%,
+      60% 40%,
+      100% 50%,
+      60% 60%,
+      50% 100%,
+      40% 60%,
+      0% 50%,
+      40% 40%
+    ); /* Star shape */
+  }
+  
+  /* Tabs */
+  .theme-military .tabs {
+    border-bottom: 1px solid var(--tertiary);
+  }
+  
+  .theme-military .tab {
+    background: var(--primary);
+    border: 1px solid var(--tertiary);
+    border-bottom: none;
+    color: var(--text-primary);
+  }
+  
+  .theme-military .tab:hover {
+    background: rgba(85, 107, 47, 0.3);
+  }
+  
+  /* Map Styling */
+  .theme-military .leaflet-container {
+    background-color: #1a2429 !important;
+    filter: sepia(30%) contrast(120%);
+  }
+  
+  .theme-military .leaflet-control-zoom a {
+    background-color: var(--primary) !important;
+    color: var(--tertiary) !important;
+    border: 1px solid var(--tertiary) !important;
+  }
+  
+  /* Chart Styling */
+  .theme-military #delayGraph {
+    border: 1px solid var(--tertiary);
+  }
+  
+  /* Readiness Bubble */
+  .theme-military .readiness-bubble.stable {
+    background-color: rgba(85, 107, 47, 0.2);
+    border: 1px solid var(--secondary);
+    color: var(--secondary);
+  }
+  
+  .theme-military .readiness-bubble.active {
+    background-color: rgba(178, 34, 34, 0.2);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+  }
+  
+  /* Master Clock */
+  .theme-military #master-clock-time {
+    color: var(--tertiary);
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  
+  /* Sync Details */
+  .theme-military .sync-details {
+    color: var(--text-primary);
+  }
+  
+  .theme-military .sync-details span {
+    color: var(--secondary);
+    font-weight: bold;
+  }
+
+ /* =============================================
+   ROOT VARIABLES & BASE STYLES
+   ============================================= */
+   :root {
+    /* Color Palette */
+    --military-green: #0a2d1c;
+    --military-dark: #0a1f16;
+    --military-light: #3a5a40;
+    --accent-yellow: #ffb400;
+    --accent-red: #ff3b30;
+    --accent-blue: #007aff;
+    --text-green: #4eff91;
+    --text-yellow: #ffe74c;
+    --text-red: #ff5c5c;
+    
+    /* UI Elements */
+    --grid-line: rgba(74, 255, 160, 0.2);
+    --terminal-bg: rgba(10, 45, 28, 0.85);
+    --terminal-border: #1a5a40;
+    --glass-overlay: rgba(9, 44, 21, 0.65);
+    
+    /* Effects */
+    --glow-green: 0 0 10px rgba(74, 255, 160, 0.4);
+    --crt-scanline: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='scanlines' width='1' height='2' patternUnits='userSpaceOnUse' patternTransform='rotate(0)'%3E%3Crect x='0' y='0' width='1' height='1' fill='rgba(0, 0, 0, 0)'/%3E%3Crect x='0' y='1' width='1' height='1' fill='rgba(0, 0, 0, 0.03)'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23scanlines)'/%3E%3C/svg%3E");
+    --grid-background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='rgba(74, 255, 160, 0.1)' stroke-width='1'/%3E%3C/svg%3E");
+    
+    /* Typography */
+    --font-terminal: 'JetBrains Mono', 'Courier New', monospace;
+    --font-display: 'Orbitron', 'Arial', sans-serif;
+    --font-tactical: 'Quantico', 'Verdana', sans-serif;
+
+    --font-power: 'VT323', monospace;
+  }
+  
+  /* Font imports */
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700&family=Quantico:wght@400;700&display=swap');
+  
+  /* Base styles */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  body {
+    margin: 0;
+    font-family: var(--font-terminal);
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  
+  /* =============================================
+     APP & MAIN LAYOUT
+     ============================================= */
+  .App {
+    background-color: var(--military-dark);
+    background-image: var(--grid-background);
+    color: var(--text-green);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    padding: 0;
+  }
+  
+  .App::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--crt-scanline);
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.7;
+  }
+  
+  /* Main layout containers */
+  .container {
+    width: 96%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+  
+  .header {
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    border-bottom: 2px solid var(--accent-yellow);
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-yellow);
+    text-shadow: var(--glow-green);
+  }
+  
+  .header p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  
+  /* =============================================
+     DASHBOARD COMPONENTS
+     ============================================= */
+  
+  /* Dashboard layout */
+  .dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1400px;
+    margin: auto;
+  }
+  
+  /* Cards */
+  .card, .delay-card {
+    flex: 1;
+    min-width: 300px; 
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+  }
+    /* Military Theme */
+  .App.theme-military .card {
+    background-color: #152b12; /* example dark-greenish for military */
+    border: 1px solid #4eff91; /* optional: match the green text */
+  }
+
+  /* Power Grid Theme */
+  .App.theme-power .card {
+    background-color: #22457a; /* darker slate for a power-grid look */
+    border: 1px solid #00e5ff; /* optional: electric-blue border */
+  }
+
+  /* Finance Theme */
+  .App.theme-finance .card {
+    background-color: #d7ab65; /* crisp white for finance */
+    border: 1px solid #ccc;    /* subtle gray border */
+  }
+
+  /* Normal Theme */
+  .App.theme-normal .card {
+    background-color: #4e566d; /* classic light-gray for normal */
+    border: 1px solid #000000;    /* optional: light border */
+  }
+
+  .App.theme-power .sync-details span {
+    text-shadow: 0 0 6px #684595;
+  }
+  .App.theme-finance .sync-details span {
+    text-shadow: 0 0 6px #ffffff;
+  }
+  .App.theme-normal .sync-details span {
+    text-shadow: 0 0 3px #524674;
+  }
+  
+
+
+  /* Master clock */
+  .master-clock {
+    font-family: var(--font-terminal);
+    padding: 10px;
+    border-bottom: 1px solid var(--grid-line);
+    margin-bottom: 15px;
+  }
+  
+  .master-clock h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--text-yellow);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  
+  .master-clock p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+  
+  #master-clock-time {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-yellow);
+    letter-spacing: 1px;
+  }
+  
+  /* System status */
+  .sync-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0;
+    font-family: var(--font-terminal);
+    font-size: 0.9rem;
+  }
+  
+  .sync-details p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .status-active {
+    animation: pulse 2s infinite;
+  }
+  
+  /* =============================================
+     TAB SYSTEM
+     ============================================= */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin: 15px 0 10px 0;
+    border-bottom: 1px solid var(--terminal-border);
+  }
+  
+  .tab {
+    background: var(--military-dark);
+    border: 1px solid var(--terminal-border);
+    border-bottom: none;
+    color: var(--text-green);
+    font-family: var(--font-tactical);
+    padding: 8px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    position: relative;
+    letter-spacing: 1px;
+  }
+  
+  .tab:hover {
+    background: rgba(58, 90, 64, 0.3);
+  }
+  
+  .tab-content {
+    padding: 10px 0;
+    font-size: 0.9rem;
+  }
+  
+  .tab-content p {
+    margin-bottom: 5px;
+  }
+  
+  /* =============================================
+     MAP COMPONENTS
+     ============================================= */
+  .map-container, #gps-map, #bps-map {
+    width: 100%;
+    height: 300px;
+    border: 1px solid var(--terminal-border);
+    margin-top: 10px;
+    background-color: #0a1a14;
+    position: relative;
+  }
+  
+  .map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 10px 0;
+  }
+  
+  .map-controls button {
+    background: linear-gradient(to bottom, #1a3e2a, #0c2418);
+    border: 1px solid var(--terminal-border);
+    color: var(--text-green);
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  
+  .map-controls button:hover {
+    background: linear-gradient(to bottom, #234d38, #0c2a1c);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* =============================================
+     BUTTONS & CONTROLS
+     ============================================= */
+  button {
+    background: linear-gradient(to bottom, #1a3e2a, #0c2418);
+    border: 1px solid var(--terminal-border);
+    color: var(--text-green);
+    font-family: var(--font-terminal);
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+  
+  button:hover {
+    background: linear-gradient(to bottom, #234d38, #0c2a1c);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  button:active {
+    background: linear-gradient(to bottom, #0c2418, #1a3e2a);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+  }
+  
+  .failover-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: space-between;
+  }
+  
+  #dark-mode-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 1.2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 90;
+  }
+  
+  /* =============================================
+     ALERTS & NOTIFICATIONS
+     ============================================= */
+  .failover-alert {
+    background: rgba(255, 59, 48, 0.15);
+    border: 1px solid var(--accent-red);
+    border-left: 5px solid var(--accent-red);
+    color: var(--text-red);
+    padding: 10px 15px;
+    margin: 10px 0;
+    font-family: var(--font-tactical);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    animation: alertPulse 2s infinite;
+  }
+  
+  .failover-alert p::before {
+    content: "⚠";
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }
+  
+/* Failover Readiness - Bubble Styling */
+.failover-readiness {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between text and bubble */
+  font-size: 1rem;
+  font-family: var(--font-terminal);
+  margin: 10px auto;
+}
+
+/* Bubble Styles */
+.readiness-bubble {
+  padding: 8px 15px;
+  border-radius: 20px; /* Rounded bubble */
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  min-width: 120px; /* Ensures it maintains a shape */
+}
+
+/* Stable (Green Bubble) */
+.readiness-bubble.stable {
+  background-color: rgba(50, 205, 50, 0.2); /* Light green */
+  border: 1px solid limegreen;
+  color: limegreen;
+  box-shadow: 0px 0px 8px rgba(50, 205, 50, 0.4);
+}
+
+/* Failover Active (Red Bubble) */
+.readiness-bubble.active {
+  background-color: rgba(255, 69, 58, 0.2); /* Light red */
+  border: 1px solid red;
+  color: red;
+  box-shadow: 0px 0px 8px rgba(255, 69, 58, 0.5);
+}
+
+
+  /* =============================================
+     CHART & DATA VISUALIZATION
+     ============================================= */
+  .delay-card {
+    padding: 15px;
+  }
+  
+  .delay-card h2 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--text-yellow);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  
+  /* =============================================
+     LEAFLET MAP CUSTOMIZATIONS
+     ============================================= */
+  .leaflet-container {
+    background: #0a1f16 !important;
+    font-family: var(--font-terminal) !important;
+  }
+  
+  .leaflet-control-zoom a {
+    background: var(--military-dark) !important;
+    color: var(--text-green) !important;
+    border: 1px solid var(--terminal-border) !important;
+  }
+  
+  .leaflet-tile {
+    filter: hue-rotate(190deg) saturate(0.7) brightness(0.8) invert(0.1) !important;
+  }
+  
+  /* =============================================
+     DARK MODE & THEME VARIANTS
+     ============================================= */
+  .App.dark-mode {
+    background-color: #050d0a;
+  }
+  
+  .App.dark-mode .leaflet-tile {
+    filter: hue-rotate(260deg) saturate(0.3) brightness(0.6) invert(0.2) !important;
+  }
+  
+  .App.night-vision {
+    background-color: #0a1a0a;
+    color: #77ff77;
+  }
+  
+  .App.night-vision .leaflet-tile {
+    filter: hue-rotate(260deg) saturate(0.3) brightness(0.6) invert(0.2) !important;
+  }
+  
+  .App.thermal {
+    background-color: #0a0a0f;
+  }
+  
+  .App.thermal .leaflet-tile {
+    filter: grayscale(1) contrast(1.5) !important;
+  }
+  
+  /* =============================================
+     CUSTOM SCROLLBAR
+     ============================================= */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--military-dark);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--military-light);
+    border-radius: 2px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--terminal-border);
+  }
+  
+  /* =============================================
+     ANIMATIONS
+     ============================================= */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  @keyframes alertPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  /* =============================================
+     RESPONSIVE DESIGN
+     ============================================= */
+  @media (max-width: 1200px) {
+    .dashboard-container {
+      flex-direction: column;
+    }
+    
+    .card, .delay-card {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+    }
+    
+    .header h1 {
+      font-size: 1.2rem;
+    }
+    
+    .failover-buttons {
+      flex-direction: column;
+    }
+    
+    .map-controls button {
+      flex-grow: 1;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .header h1 {
+      font-size: 1rem;
+    }
+    
+    #master-clock-time {
+      font-size: 1rem;
+    }
+    
+    .map-container, #gps-map, #bps-map {
+      height: 250px;
+    }
+    
+    .failover-buttons button {
+      width: 100%;
+    }
+  }
+  /* Make the main dashboard row a flex container */
+.dashboard-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px; /* Adjust spacing */
+  padding: 10px;
+}
+
+/* Each section (Clock, Status, Location) */
+.master-clock, .failover-status, .location-details {
+  flex: 1; /* Equal width */
+  min-width: 250px; /* Prevent items from being too small */
+}
+
+/* Make sure elements are aligned properly */
+.master-clock h3, .failover-status p, .location-details p {
+  margin-bottom: 8px;
+}
+
+/* Ensure tabs and maps remain separate */
+.tab-content {
+  margin-top: 15px;
+}
+
+/* Hide tabs when not active */
+.tab-content.hidden {
+  display: none;
+}
+
+/* Show the active tab */
+.tab-content.visible {
+  display: block;
+}
+
+/* Map container adjustments */
+.map-container {
+  width: 100%;
+  height: 300px;
+  border: 1px solid var(--terminal-border);
+  margin-top: 10px;
+  background-color: #0a1a14;
+}/* Enlarged Tabs for GPS/BPS */
+.large-tab {
+  font-size: 1.2rem; /* Bigger font */
+  padding: 12px 25px; /* More padding */
+  min-width: 120px; /* Ensures tabs are bigger */
+  text-align: center;
+  border-radius: 5px;
+}
+
+/* THEME STYLES */
+.App.theme-power {
+  background-color: #0d6dc7 !important;
+  background-image: none !important;
+  color: #00e5ff !important;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+  font-family: var(--font-power);
+}
+
+.App.theme-finance {
+  background-color: #efca8f !important;
+  background-image: none !important;
+  color: #333 !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+.App.theme-normal {
+  background-color: #1f2435 !important;
+  background-image: none !important;
+  color: #000000 !important;
+  font-family: 'Arial', sans-serif;
+}
+
+.App.theme-military {
+  background-color: #0a2d1c !important;
+  /* Optionally, override background-image if needed */
+  background-image: var(--grid-background);
+  color: #44ff44 !important;
+  
+  font-family: var(--font-terminal);
+}
+
+/* Center the button container */
+.theme-switcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+/* Optional: style buttons */
+.theme-switcher button {
+  margin-right: 10px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #333;
+  color: white;
+}
+
+.theme-switcher button:hover {
+  background-color: #555;
+}
+/* ================================
+   HEADER STYLES BY THEME
+   ================================ */
+
+   .theme-military .header {
+    background: #0a1f16;
+    color: #44ff44;
+    border-bottom: 2px solid #ffb400;
+  }
+  
+  .theme-power .header {
+    background: #111111;
+    color:  #e010b3;
+    border-bottom: 2px solid #00ffcc;
+  }
+  
+  .theme-finance .header {
+    background: #d8b06f;
+    color: #111;
+    border-bottom: 2px solid #3f51b5;
+  }
+  
+  .theme-normal .header {
+    background: #395081;
+    color:  #0a0909;
+    border-bottom: 2px solid #161313;
+  }
+  
+  /* Text styles for h1 and p inside header */
+  .theme-finance .header h1,
+  .theme-finance .header p {
+    color: #111;
+    text-shadow: none;
+  }
+  
+  .theme-power .header h1 {
+    color: #00ffcc;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  }
+  
+  .theme-military .header h1 {
+    color: #ffe74c;
+    text-shadow: var(--glow-green);
+  }
+  
+  .theme-normal .header h1 {
+    color: #100d0d;
+  }
+  
+
+/* Sector-Specific Panel Styles */
+.sector-specific-panel {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Military Theme Styles */
+.theme-military .sector-panel.military-panel {
+  background-color: rgba(0, 100, 0, 0.1);
+  border: 1px solid darkgreen;
+}
+
+.military-panel .tactical-alerts {
+  color: darkgreen;
+}
+
+.military-panel .indicator.alert {
+  color: red;
+  font-weight: bold;
+}
+
+/* Power Grid Theme Styles */
+.theme-power .sector-panel.power-grid-panel {
+  background-color: rgba(0, 0, 139, 0.1);
+  border: 1px solid darkblue;
+}
+
+.power-grid-panel .status-indicator.warning {
+  color: orange;
+  font-weight: bold;
+}
+
+/* Finance Theme Styles */
+.theme-finance .sector-panel.finance-panel {
+  background-color: rgba(255, 215, 0, 0.1);
+  border: 1px solid goldenrod;
+}
+
+.finance-panel .risk-indicator.high-risk {
+  color: red;
+  font-weight: bold;
+}
+
+/* Normal/Stakeholder Theme Styles */
+.theme-normal .sector-panel.stakeholder-panel {
+  background-color: rgba(26, 14, 50, 0.334);
+  border: 1px solid rgb(12, 11, 11);
+}
+
+/* Add these styles to your existing App.css */
+.bps-marker {
+  background: var(--accent-blue);
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 30px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border: 2px solid white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.bps-marker.active {
+  background: var(--accent-yellow);
+  color: black;
+  transform: scale(1.2);
+}
+
+.bps-marker div {
+  transform: rotate(45deg);
+  display: inline-block;
+}
+
+.delay-card {
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+}
+
+.scenario-buttons button {
+  margin: 5px 0;
+}
+
+.scenario-alert {
+  background: rgba(255, 165, 0, 0.2);
+  border: 1px solid orange;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+
+
+/* Delay Graph Styles */
+.delay-card {
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+  border-radius: 4px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: var(--glow-green);
+}
+
+.delay-card h2 {
+  color: var(--text-yellow);
+  font-family: var(--font-display);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.2rem;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  min-height: 300px;
+}
+
+#delayGraph {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.clickable-sync {
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--text-yellow);
+  transition: all 0.2s ease;
+}
+
+.clickable-sync:hover {
+  color: var(--accent-yellow);
+  text-shadow: var(--glow-green);
+}
