@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import "./App.css";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -63,6 +64,7 @@ function App() {
   const [theme, setTheme] = useState("power");
   const [failoverMode, setFailoverMode] = useState("normal");
   const [masterClock, setMasterClock] = useState("");
+  const [easternClock, setEasternClock] = useState('');
   const [activeTab, setActiveTab] = useState("bps");
   const [darkMode, setDarkMode] = useState(false);
   const [gpsUnsyncedTime, setGpsUnsyncedTime] = useState(null);
@@ -75,11 +77,19 @@ function App() {
   
   // Chart data states
   const [chartData, setChartData] = useState(
-    Array.from({length: 20}, () => Math.floor(Math.random() * 100))
+    Array.from({ length: 3600 }, () => Math.floor(Math.random() * 100))
   );
+  const formatTime = (date) =>
+    `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`;
+  
+  const now = new Date();
   const [chartLabels, setChartLabels] = useState(
-    Array.from({length: 20}, (_,i) => `${i+1}s`)
+    Array.from({ length: 3600 }, (_, i) => {
+      const past = new Date(now.getTime() - (3600 - i) * 1000);
+      return formatTime(past);
+    })
   );
+  
 
   // Refs
   const bpsMapRef = useRef(null);
@@ -94,14 +104,9 @@ function App() {
     disaster: "🌪️ Natural Disaster: Satellite communication may fail — BPS maintains local sync.",
   };
 
-  // Initialize chart
   useEffect(() => {
     const ctx = document.getElementById('delayGraph');
     if (ctx && !chartRef.current) {
-      // Ensure canvas is properly sized
-      ctx.style.width = '100%';
-      ctx.style.height = '100%';
-      
       chartRef.current = new Chart(ctx, {
         type: 'line',
         data: {
@@ -109,8 +114,8 @@ function App() {
           datasets: [{
             label: 'Delay (ns)',
             data: chartData,
-            borderColor: 'rgb(74, 255, 160)',
-            backgroundColor: 'rgba(74, 255, 160, 0.1)',
+            borderColor: getThemeBorderColor(theme),
+            backgroundColor: getThemeFillColor(theme),
             borderWidth: 2,
             pointRadius: 0,
             tension: 0.4
@@ -119,9 +124,7 @@ function App() {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: {
-            duration: 0 // disable animations for better performance
-          },
+          animation: { duration: 0 },
           scales: {
             y: {
               beginAtZero: false,
@@ -130,13 +133,20 @@ function App() {
             },
             x: {
               grid: { color: 'rgba(74, 255, 160, 0.1)' },
-              ticks: { color: 'var(--text-green)' }
+              ticks: {
+                color: 'rgba(255, 255, 255, 0.7)',
+                autoSkip: true,
+                maxTicksLimit: 10,
+                callback: function (value, index) {
+                  return index % 50 === 0 ? this.getLabelForValue(value) : '';
+                }
+              }
             }
           }
         }
       });
     }
-
+  
     return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
@@ -144,31 +154,38 @@ function App() {
       }
     };
   }, []);
-
-  // Update chart data
+  
+  
   useEffect(() => {
     const interval = setInterval(() => {
       if (chartRef.current) {
         const newValue = Math.floor(10 + Math.random() * 90);
-        const newLabel = `${chartLabels.length + 1}s`;
-        
-        // Create new arrays instead of mutating
-        const newData = [...chartData.slice(1), newValue];
-        const newLabels = [...chartLabels.slice(1), newLabel];
-        
-        // Update state
-        setChartData(newData);
-        setChartLabels(newLabels);
-        
-        // Directly update chart
-        chartRef.current.data.datasets[0].data = newData;
-        chartRef.current.data.labels = newLabels;
+        const now = new Date();
+        const newLabel = formatTime(now);
+  
+        const updatedData = [...chartRef.current.data.datasets[0].data, newValue].slice(-3600);
+        const updatedLabels = [...chartRef.current.data.labels, newLabel].slice(-3600);
+  
+        chartRef.current.data.datasets[0].data = updatedData;
+        chartRef.current.data.labels = updatedLabels;
         chartRef.current.update();
       }
     }, 1000);
-
+  
     return () => clearInterval(interval);
-  }, [chartData, chartLabels]);
+  }, []);
+  
+
+  useEffect(() => {
+    if (chartRef.current) {
+      chartRef.current.data.datasets[0].borderColor = getThemeBorderColor(theme);
+      chartRef.current.data.datasets[0].backgroundColor = getThemeFillColor(theme);
+      chartRef.current.update();
+    }
+  }, [theme]);
+  
+  
+  
 
   // Update currentTime every second
   useEffect(() => {
@@ -189,11 +206,11 @@ function App() {
       if (bpsLocation.name === "WHUT-TV") {
         setBpsOffset(Math.floor(2 + Math.random() * 20));
       } else if (bpsLocation.name === "KWGN-TV") {
-        setBpsOffset(Math.floor(10 + Math.random() * 15)); // 10-25ns
+        setBpsOffset(Math.floor(10 + Math.random() * 22)); // 10-25ns
       } else {
-        setBpsOffset(Math.floor(12 + Math.random() * 18)); // 12-30ns
+        setBpsOffset(Math.floor(12 + Math.random() * 25)); // 12-30ns
       }
-    }, 1000);
+    }, 500);
     
     return () => clearInterval(offsetInterval);
   }, [bpsLocation]);
@@ -223,7 +240,7 @@ function App() {
         }
         
         L.tileLayer(getTileLayerByTheme(theme), {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright"></a> ',
         }).addTo(bpsMapRef.current);
         
         // Add markers for each BPS station
@@ -234,7 +251,7 @@ function App() {
             icon: L.divIcon({
               className: `bps-marker ${isCurrent ? 'active' : ''}`,
               html: `<div>${location.name}</div>`,
-              iconSize: [30, 30]
+              iconSize: [20, 20]
             })
           })
           .bindPopup(`
@@ -264,11 +281,24 @@ function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
-      const gmt = `${String(now.getUTCHours()).padStart(2, "0")}:${String(
+
+      // GMT time string
+      const gmt = `${String(now.getUTCHours()).padStart(2, '0')}:${String(
         now.getUTCMinutes()
-      ).padStart(2, "0")}:${String(now.getUTCSeconds()).padStart(2, "0")} GMT`;
+      ).padStart(2, '0')}:${String(now.getUTCSeconds()).padStart(2, '0')} GMT`;
       setMasterClock(gmt);
+
+      // Eastern Time (ET) string
+      const eastern = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+        timeZone: 'America/New_York',
+      });
+      setEasternClock(eastern);
     }, 1000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -283,6 +313,28 @@ function App() {
   }, [darkMode]);
 
   // Helper functions
+  function getThemeBorderColor(theme) {
+    switch (theme) {
+      case "military": return "#4aff70";
+      case "power": return "#00e5ff";
+      case "finance": return "#d38217";
+      case "normal": return "#1a1a1a";
+      default: return "#4aff70";
+    }
+  }
+  
+  function getThemeFillColor(theme) {
+    switch (theme) {
+      case "military": return "rgba(74, 255, 160, 0.1)";
+      case "power": return "rgba(0, 229, 255, 0.2)";
+      case "finance": return "rgba(211, 130, 23, 0.2)";
+      case "normal": return "rgba(0, 0, 0, 0.1)";
+      default: return "rgba(74, 255, 160, 0.1)";
+    }
+  }
+  function getChartColors(failoverMode) { 
+  }
+  
   function addBpsPolygonCoverage(map) {
     fetch("/bpsStations.geojson")
       .then((response) => response.json())
@@ -343,76 +395,7 @@ function App() {
     else restoreNormalMode();
   }
 
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-    setTimeout(() => {
-      if (bpsMapRef.current) bpsMapRef.current.invalidateSize();
-      if (chartRef.current) chartRef.current.update();
-    }, 100);
-  };
-
-  // Sector-Specific Panels
-  const MilitaryPanel = () => (
-    <div className="sector-panel military-panel">
-      <div className="tactical-alerts">
-        <h3>Tactical GPS Status</h3>
-        <p>Threat Level: {failoverMode === "normal" ? "LOW" : "HIGH"}</p>
-        <p>Zone: Active GPS Denial Watch</p>
-        <div className="threat-indicators">
-          <div className={`indicator ${failoverMode !== "normal" ? "alert" : ""}`}>
-            Jamming Detection: {failoverMode !== "normal" ? "ACTIVE" : "CLEAR"}
-          </div>
-          <div className="communication-status">
-            Encrypted Comms: {failoverMode === "normal" ? "SECURE" : "REROUTING"}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const PowerGridPanel = () => (
-    <div className="sector-panel power-grid-panel">
-      <div className="grid-diagnostics">
-        <h3>Grid Synchronization</h3>
-        <div className="sync-metrics">
-          <p>Substation Drift: {failoverMode === "normal" ? "↓ 1.2ns" : "↑ Critical"}</p>
-          <p>Blackout Risk: {failoverMode === "normal" ? "None" : "Elevated"}</p>
-          <div className="power-status">
-            <div className={`status-indicator ${failoverMode !== "normal" ? "warning" : "normal"}`}>
-              Network Stability: {failoverMode === "normal" ? "STABLE" : "POTENTIAL DISRUPTION"}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const FinancePanel = () => (
-    <div className="sector-panel finance-panel">
-      <div className="finance-info">
-        <h3>Transaction Synchronization</h3>
-        <div className="sync-details">
-          <p>GPS-BPS Offset: {failoverMode === "normal" ? "0.9ns" : "CRITICAL"}</p>
-          <p>Sync Confidence: {failoverMode === "normal" ? "99.9%" : "92.3%"}</p>
-          <div className="transaction-risk">
-            <div className={`risk-indicator ${failoverMode !== "normal" ? "high-risk" : "low-risk"}`}>
-              Transaction Risk: {failoverMode !== "normal" ? "ELEVATED" : "LOW"}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const StakeholderPanel = () => (
-    <div className="sector-panel stakeholder-panel">
-      <div className="simple-overview">
-        <h3>System Status</h3>
-        <p>Status: {failoverMode === "normal" ? "Operational" : "Failover Active"}</p>
-        <p>Redundancy: {bpsSyncText}</p>
-      </div>
-    </div>
-  );
+  
 
   // Derived UI text based on failover mode
   let gpsSyncText = "ACTIVE";
@@ -439,15 +422,160 @@ function App() {
     bpsSyncText = "ACTIVE (Failover)";
     bpsSyncColor = "green";
   }
+  else if (failoverMode === "normal") {
+    failoverAlertText = "✅ GPS Operational: All Systems Normal";
+    showFailoverAlert = false;
+    gpsSyncText = "ACTIVE";
+    gpsSyncColor = "green";
+    bpsSyncText = "ACTIVE";
+    bpsSyncColor = "green";
+  }
+  else if (failoverMode === "military") {
+    failoverAlertText = "⚠️ Military Mode: Tactical Operations Active";
+    showFailoverAlert = true;
+    gpsSyncText = "ACTIVE (Military)";
+    gpsSyncColor = "orange";
+    bpsSyncText = "ACTIVE (Military)";
+    bpsSyncColor = "orange";
+  }
+  else if (failoverMode === "Solar") {
+    failoverAlertText = "⚠️ Solar Storm: GPS Signals Disrupted";
+    showFailoverAlert = true;
+    gpsSyncText = "DISRUPTED";
+    gpsSyncColor = "yellow";
+    bpsSyncText = "ACTIVE (Solar)";
+    bpsSyncColor = "yellow";
+  }
+  else if (failoverMode === "disaster") {
+    failoverAlertText = "⚠️ Natural Disaster: GPS Signals Unstable";
+    showFailoverAlert = true;
+    gpsSyncText = "UNSTABLE";
+    gpsSyncColor = "orange";
+    bpsSyncText = "ACTIVE (Disaster)";
+    bpsSyncColor = "orange";
+  }
+  else if (failoverMode === "urban") {
+    failoverAlertText = "⚠️ Urban Canyon: GPS Signals Weak";
+    showFailoverAlert = true;
+    gpsSyncText = "WEAK";
+    gpsSyncColor = "orange";
+    bpsSyncText = "ACTIVE (Urban)";
+    bpsSyncColor = "orange";
+  }
+  else if (failoverMode === "underground") {
+    failoverAlertText = "⚠️ Underground: GPS Signals Unavailable";
+    showFailoverAlert = true;
+    gpsSyncText = "UNAVAILABLE";
+    gpsSyncColor = "red";
+    bpsSyncText = "ACTIVE (Underground)";
+    bpsSyncColor = "red";
+  }
+  
+  // Sector-Specific Panels
+  
+  const MilitaryPanel = () => (
+    <div className="sector-panel military-panel">
+        <h3>Tactical GPS Status</h3>
+        <p>Threat Level: {failoverMode === "normal" ? "LOW" : "HIGH"}</p>
+        <p>Zone: Active GPS Denial Watch</p>
+        <div className="threat-indicators">
+          <div className={`indicator ${failoverMode !== "normal" ? "alert" : ""}`}>
+            Jamming Detection: {failoverMode !== "normal" ? "ACTIVE" : "CLEAR"}
+          </div>
+          <div className="communication-status">
+            Encrypted Comms: {failoverMode === "normal" ? "SECURE" : "REROUTING"}
+          </div>
+      </div>
+
+    </div>
+  );
+  
+  const PowerGridPanel = () => (
+    <div className="sector-panel power-grid-panel">
+      <div className="grid-diagnostics">
+        <h3>Grid Synchronization</h3>
+        <div className="sync-metrics">
+          <p>
+            Substation Drift:{" "}
+            {failoverMode === "normal" ? "↓ 1.2ns" : "↑ Critical"}
+          </p>
+          <p>
+            Blackout Risk: {failoverMode === "normal" ? "None" : "Elevated"}
+          </p>
+          <div className="power-status">
+            <div
+              className={`status-indicator ${
+                failoverMode !== "normal" ? "warning" : "normal"
+              }`}
+            >
+              Network Stability:{" "}
+              {failoverMode === "normal"
+                ? "STABLE"
+                : "POTENTIAL DISRUPTION"}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  
+  const FinancePanel = () => (
+    <div className="sector-panel finance-panel">
+
+      <div className="finance-info">
+        <h3>Transaction Synchronization</h3>
+        <div className="sync-details">
+          <p>
+            GPS-BPS Offset:{" "}
+            {failoverMode === "normal" ? "0.9ns" : "CRITICAL"}
+          </p>
+          <p>
+            Sync Confidence:{" "}
+            {failoverMode === "normal" ? "99.9%" : "92.3%"}
+          </p>
+          <div className="transaction-risk">
+            <div
+              className={`risk-indicator ${
+                failoverMode !== "normal" ? "high-risk" : "low-risk"
+              }`}
+            >
+              Transaction Risk:{" "}
+              {failoverMode !== "normal" ? "ELEVATED" : "LOW"}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  
+  const StakeholderPanel = () => (
+    <div className="sector-panel stakeholder-panel">
+      <div className="simple-overview">
+        <h3>System Status</h3>
+        <p>
+          Status: {failoverMode === "normal" ? "Operational" : "Failover Active"}
+        </p>
+        <p>Redundancy: {bpsSyncText}</p>
+        
+        
+      </div>
+    </div>
+  );
+  
+   
+    
+  
 
   return (
+
+    
     <div className={`App ${darkMode ? "dark-mode" : ""} theme-${theme}`}>
       {/* Theme Switcher Buttons */}
       <div className="theme-switcher" style={{ marginBottom: "15px" }}>
-        <button onClick={() => setTheme("military")}>🎖️ Military</button>
-        <button onClick={() => setTheme("power")}>⚡ Power Grid</button>
-        <button onClick={() => setTheme("finance")}>💰 Finance</button>
-        <button onClick={() => setTheme("normal")}>👥 Normal</button>
+        <button onClick={() => setTheme("military")}>Military</button>
+        <button onClick={() => setTheme("power")}>Power Grid</button>
+        <button onClick={() => setTheme("finance")}>Finance</button>
+        <button onClick={() => setTheme("normal")}>Standard</button>
       </div>
 
       <div className="container">
@@ -457,16 +585,107 @@ function App() {
             {theme === "military" && " Military Command Dashboard"}
             {theme === "power" && " Power Grid Synchronization"}
             {theme === "finance" && " Financial Sync Control Center"}
-            {theme === "normal" && " Standard Stakeholder Dashboard"}
+            {theme === "normal" && " Standard BPS Dashboard"}
           </h1>
           <p>
             {theme === "military" && "Optimized for tactical field operations."}
             {theme === "power" && "Monitoring grid-wide time synchronization and reliability."}
             {theme === "finance" && "Tracking time-critical transactions and network trust."}
-            {theme === "normal" && "Real-time visualization for all stakeholders."}
+            {theme === "normal" && "Real-time visualization for all."}
           </p>
         </div>
 
+
+
+          
+        {/* Top Status Block Wrapper */}
+        <div className="top-status-center">
+
+        <div className="delay-card">
+          <h2>DELAY ANALYSIS (LAST HOUR)</h2>
+          <div className="chart-container" ref={chartContainerRef}>
+            <canvas id="delayGraph"></canvas>
+          </div>
+        </div>
+
+         {/* LEFT COLUMN */}
+         <div className="system-location">
+
+         <div className="failover-readiness">
+
+          
+            
+            <span
+              className={`readiness-bubble ${failoverMode === "normal" ? "stable" : "active"} clickable-sync`}
+              onClick={() => setShowDelayGraph(prev => !prev)}
+              title="Click to toggle delay graph"
+            >
+              {failoverMode === "normal" ? "Stable" : "Failover Active"}
+            </span>
+          </div>
+
+          <div className="system-metrics">
+            <p>
+              GPS: <span style={{ color: gpsSyncColor, fontWeight: "bold" }}>{gpsSyncText}</span>
+            </p>
+            <p>
+              BPS: <span style={{ color: bpsSyncColor, fontWeight: "bold" }}>{bpsSyncText}</span>
+              {" Sync: "}
+              <span>{bpsOffset}ns</span>
+            </p>
+            <p>
+            eLoran: <span style={{ color: "green" , fontWeight: "bold" }}>ACTIVE</span>
+              {" Sync: "}
+              <span>
+                {eloranOffset}ns
+              </span>
+            </p>
+          </div>
+
+
+            
+                    {/* LEFT COLUMN */}
+        <div className="system-location">
+
+            <div className="sync-label">
+
+            {theme === "military" && <div className="sector-panel"><MilitaryPanel /></div>}
+            {theme === "power" && <div className="sector-panel"><PowerGridPanel /></div>}
+            {theme === "finance" && <div className="sector-panel"><FinancePanel /></div>}
+            {theme === "normal" && <div className="sector-panel"><StakeholderPanel /></div>}
+
+
+            <p><strong></strong></p>
+
+            <div className="clock-row">
+              <p><strong></strong></p>
+              <p className="gmt-clock" id="eastern-clock">
+                {easternClock || 'Loading...'}
+              </p>
+            </div>
+            <div className="clock-row">
+              <p><strong></strong></p>
+              <p className="gmt-clock" id="master-clock-time">
+                {masterClock || 'Loading...'}
+              </p>
+            </div>
+                          
+              <p><strong></strong></p>
+              <strong>Convention Center</strong> 
+              
+              <p><strong>Las Vegas, NV, US</strong>
+              <strong>89101</strong></p>
+            </div>
+          </div>
+       
+
+       
+
+        </div>
+
+        </div>
+
+          
         {/* Alerts */}
         {showFailoverAlert && (
           <div id="failover-alert" className="failover-alert">
@@ -480,133 +699,82 @@ function App() {
           </div>
         )}
 
+
+
         {/* Main Card */}
         <div className="card">
-          {theme === "military" && <MilitaryPanel />}
-          {theme === "power" && <PowerGridPanel />}
-          {theme === "finance" && <FinancePanel />}
-          {theme === "normal" && <StakeholderPanel />}
+        {/* RIGHT COLUMN */}
+        <div className="sync-status-panel">
           
-          <div className="dashboard-row">
-            {/* Master Clock Section */}
-            <div className="master-clock">
-              <p id="master-clock-time">{masterClock || "Loading..."}</p>
-            </div>
 
-            <div className="sync-details">
-              <p>
-                GPS:{" "}
-                <span style={{ color: gpsSyncColor, fontWeight: "bold" }}>
-                  {gpsSyncText}
-                </span>
-              </p>
-              <p>
-                BPS:{" "}
-                <span style={{ color: bpsSyncColor, fontWeight: "bold" }}>
-                  {bpsSyncText}
-                </span>
-                {"    Sync: "}
-                <span 
-                  className="clickable-sync"
-                  onClick={() => setShowDelayGraph(!showDelayGraph)}
-                >
-                  {bpsOffset}ns
-                </span>
-              </p>
-              <p>
-                eLoran:{" "}
-                <span className="status-active">ACTIVE</span>
-                {"     Sync: "}
-                <span 
-                  className="clickable-sync"
-                  onClick={() => setShowDelayGraph(!showDelayGraph)}
-                >
-                  {eloranOffset}ns
-                </span>
-              </p>
-            </div>
-
-            {/* Location Details Section */}
-            <div className="location-details">
-              <p>Locality: {bpsLocation.locality}</p>
-              <p>Zip: {bpsLocation.zip}</p>
-              <p>Street: {bpsLocation.street}</p>
-            </div>
-          </div>
           
-          <div className="failover-readiness">
-            <p></p>
-            <span className={`readiness-bubble ${failoverMode === "normal" ? "stable" : "active"}`}>
-              {failoverMode === "normal" ? "Stable" : "Failover Active"}
-            </span>
-          </div>
 
-          {/* Tabs */}
-          <div className="tabs">
-            <button className="tab large-tab" onClick={() => handleTabClick("bps")}>
-              BPS
-            </button>
-          </div>
+          
+              </div>
+
+        
+
+
+
+
+
 
           {/* BPS Tab */}
           <div
             id="bps"
-            className="tab-content"
+            className="tab-content bps-tab-content"
             style={{ display: activeTab === "bps" ? "block" : "none" }}
           >
-            <p>Country: {bpsLocation.country}</p>
-            <p>Locality: {bpsLocation.locality}</p>
-            <p>Zip: {bpsLocation.zip}</p>
-            <p>Street: {bpsLocation.street}</p>
 
-            <div className="map-controls">
-              <button onClick={() => changeLocation("washingtonDC", "bps")}>
-                {locations.washingtonDC.name}
-              </button>
-              <button onClick={() => changeLocation("colorado", "bps")}>
-                {locations.colorado.name}
-              </button>
-              <button onClick={() => changeLocation("baltimore", "bps")}>
-                {locations.baltimore.name}
-              </button>
-              <button onClick={() => changeLocation("lasVegas", "bps")}>
-                {locations.lasVegas.name}
-              </button>
-              <button onClick={() => changeLocation("stationX", "bps")}>
-                {locations.stationX.name}
-              </button>
+     
+            <div className=" bps-tab-inner">
+
+              
+
+              {/* BPS Station Info */}
+              <div className="station-details">
+                <h2>BPS Station: {bpsLocation.name}</h2>
+                <p>Locality: {bpsLocation.locality}</p>
+                <p>Zip: {bpsLocation.zip}</p>
+                <p>Street: {bpsLocation.street}</p>
+              </div>
+              
+
+              <div className="map-controls">
+                <button onClick={() => changeLocation("washingtonDC", "bps")}>
+                  {locations.washingtonDC.name}
+                </button>
+                <button onClick={() => changeLocation("colorado", "bps")}>
+                  {locations.colorado.name}
+                </button>
+                <button onClick={() => changeLocation("baltimore", "bps")}>
+                  {locations.baltimore.name}
+                </button>
+                <button onClick={() => changeLocation("lasVegas", "bps")}>
+                  {locations.lasVegas.name}
+                </button>
+                <button onClick={() => changeLocation("stationX", "bps")}>
+                  {locations.stationX.name}
+                </button>
+              </div>
+
+              <div id="bps-map" className="bps-map"></div>
             </div>
-            <div id="bps-map" style={{ width: "100%", height: "300px" }}></div>
           </div>
 
-          {/* Delay Graph */}
-          {showDelayGraph && (
-            <div className="delay-card">
-              <h2>DELAY ANALYSIS (LAST HOUR)</h2>
-              <div className="chart-container" ref={chartContainerRef}>
-                <canvas 
-                  id="delayGraph"
-                  width="400" 
-                  height="400"
-                ></canvas>
-              </div>
-            </div>
-          )}
+
+          
 
           {/* Failover Buttons */}
           <div className="failover-buttons">
             <button onClick={activateJammingMode}>🔴 Simulate GPS Jamming</button>
             <button onClick={activateUnavailableMode}>⚠️ Simulate GPS Unavailable</button>
-          
-            {/* Scenario Simulation Buttons */}
-            <div className="failover-buttons scenario-buttons" style={{ marginTop: '15px', flexWrap: 'wrap', gap: '10px' }}>
-              <button onClick={() => handleScenario('urban')}>🏙️ Urban Canyon</button>
-              <button onClick={() => handleScenario('underground')}>🚇 Underground Tunnel</button>
-              <button onClick={() => handleScenario('solar')}>🌞 Solar Storm</button>
-              <button onClick={() => handleScenario('military')}>🛡️ Military Denial</button>
-              <button onClick={() => handleScenario('disaster')}>🌪️ Natural Disaster</button>
-              <button onClick={() => handleScenario('normal')}>✅ Restore Normal Mode</button>
-            </div>
+            <button onClick={() => handleScenario('normal')}>✅ Restore Normal Mode</button>
+            <button onClick={() => handleScenario('urban')}> Urban Canyon</button>
+            <button onClick={() => handleScenario('underground')}> Underground Tunnel</button>
+            <button onClick={() => handleScenario('solar')}> Solar Storm</button>
+            <button onClick={() => handleScenario('military')}> Military Denial</button>
+            <button onClick={() => handleScenario('disaster')}> Natural Disaster</button>
           </div>
         </div>
       </div>
