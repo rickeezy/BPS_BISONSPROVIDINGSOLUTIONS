@@ -1,673 +1,23 @@
 /* 
  * BPS Broadcast Positioning Dashboard - App.css 
- * Consolidated and optimized version
  */
 
 /* =====================
    FONT IMPORTS
    ===================== */
-   @import url('https://fonts.googleapis.com/css2?family=Agency+FB&family=Franklin+Gothic+Condensed&display=swap');
-   @import url('https://fonts.googleapis.com/css2?family=Share+Tech&family=Rajdhani:wght@400;500&display=swap');
-   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Roboto+Condensed:wght@400;700&display=swap');
-   @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
-   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700&family=Quantico:wght@400;700&display=swap');
-   
+@import url('https://fonts.googleapis.com/css2?family=Agency+FB&family=Franklin+Gothic+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech&family=Rajdhani:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700&family=Quantico:wght@400;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Roboto+Condensed:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700&family=Quantico:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Nunito+Sans:wght@600&display=swap');
 /* =====================
-   MILITARY THEME STYLES
-   ===================== */
-   .App.theme-military {
-    /* Color Palette */
-    --primary: #2a3439;       /* Deep slate gray */
-    --secondary: #556B2F;     /* Olive green (darkened for better contrast) */
-    --tertiary: #CD853F;      /* Muted bronze (peruvian tan) */
-    --accent: #B22222;        /* Tactical red (firebrick) */
-    --text-primary: #e0e0e0;
-    --text-secondary: #ffffff;
-    
-    /* Typography */
-    font-family: 'Agency FB', 'Franklin Gothic Condensed', sans-serif;
-    letter-spacing: 0.5px;
-    
-    /* Background with topo/grid overlay */
-    background-color: var(--primary);
-    background-image: 
-      linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
-      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none'/%3E%3Cpath d='M20 20L80 20M20 40L80 40M20 60L80 60M20 80L80 80M20 20L20 80M40 20L40 80M60 20L60 80M80 20L80 80' stroke='%23556B2F' stroke-width='0.3'/%3E%3C/svg%3E");
-  }
-  /* =====================
-   POWER GRID THEME STYLES
-   ===================== */
-.App.theme-power {
-  /* Color Palette */
-  --primary: #0039a6;       /* Electric blue */
-  --secondary: #2a0a5e;     /* Deep indigo */
-  --tertiary: #c0c0c0;      /* Metallic silver */
-  --accent: #FFD700;        /* High-voltage yellow */
-  --text-primary: #e6f7ff;
-  --text-secondary: #ffffff;
-  
-  /* Typography */
-  font-family: 'Share Tech', 'Rajdhani', sans-serif;
-  letter-spacing: 0.3px;
-  
-  /* Circuit board background */
-  background-color: var(--primary);
-  background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none'/%3E%3Cpath d='M20 20h20v20H20zM60 20h20v20H60zM20 60h20v20H20zM60 60h20v20H60zM40 40h20v20H40z' stroke='%23c0c0c0' stroke-width='0.5' fill='none'/%3E%3Cpath d='M40 20v20M60 40v20M20 40h20M60 60h20M40 80v-20M20 60v-20M80 40v20' stroke='%230039a6' stroke-width='1'/%3E%3C/svg%3E");
-}
-
-/* Header */
-.theme-power .header {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border: 1px solid var(--tertiary);
-  border-bottom: 3px solid var(--accent);
-  color: var(--text-primary);
-}
-
-.theme-power .header h1 {
-  font-family: 'Share Tech', sans-serif;
-  font-weight: 400;
-  color: var(--tertiary);
-  text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
-  letter-spacing: 1.5px;
-}
-
-/* Cards */
-.theme-power .card {
-  background-color: rgba(0, 57, 166, 0.85);
-  border: 1px solid var(--tertiary);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-
-/* Status Indicators */
-.theme-power .status-active {
-  color: var(--accent);
-  font-weight: bold;
-  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-}
-
-.theme-power .failover-alert {
-  background-color: rgba(255, 215, 0, 0.15);
-  border-left: 4px solid var(--accent);
-  color: var(--text-primary);
-  font-weight: bold;
-}
-
-/* Buttons */
-.theme-power button {
-  background: linear-gradient(to bottom, #1a4b8c, var(--primary));
-  border: 1px solid var(--tertiary);
-  color: var(--text-primary);
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 500;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
-  padding: 8px 15px 8px 30px;
-  position: relative;
-  text-transform: uppercase;
-}
-/* =====================
-   NORMAL THEME STYLES 
-   ===================== */
-   .App.theme-normal {
-    /* (Previous normal theme styles remain unchanged) */
-  }
-  
-  /* Location and Station Info Styling */
-  .theme-normal .location-details,
-  .theme-normal .tab-content p {
-    font-family: 'Roboto Condensed', sans-serif;
-    font-weight: 400;
-    letter-spacing: 0.2px;
-    font-size: 0.85rem;
-    line-height: 1.4;
-  }
-  
-  /* BPS Buttons Styling */
-  .theme-normal .map-controls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px;
-    margin: 8px 0;
-  }
-  
-  .theme-normal .map-controls button {
-    padding: 2px 6px !important;      /* Ultra-compact padding */
-    font-size: 0.65rem !important;    /* Very small text */
-    height: 22px !important;          /* Fixed minimal height */
-    min-width: 60px !important;       /* Minimum width */
-    margin: 0 2px !important;         /* Tight spacing */
-  }
-  
-  
-/* =====================
-   FINANCIAL THEME STYLES
-   ===================== */
-
-  .App.theme-finance {
-    /* Color Palette */
-    --primary: #001a3f;       /* Deep navy */
-    --secondary: #3d3d3d;     /* Graphite gray */
-    --tertiary: #e5e4e2;      /* Platinum */
-    --accent-positive: #00a86b; /* Calculated green */
-    --accent-negative: #d62828; /* Cautionary red */
-    --text-primary: #333333;
-    --text-secondary: #ffffff;
-    
-    /* Typography */
-    font-family: 'Playfair Display', 'Roboto Condensed', serif;
-    
-    /* Background with data graph watermark */
-    background-color: var(--tertiary);
-    background-image: 
-      linear-gradient(rgba(229, 228, 226, 0.9), rgba(229, 228, 226, 0.9)),
-      url("data:image/svg+xml,%3Csvg width='120' height='80' viewBox='0 0 120 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 60L30 30L50 50L70 10L90 40L110 20' stroke='%23001a3f' stroke-width='0.3' fill='none' stroke-dasharray='2 2'/%3E%3Cpath d='M10 70L30 40L50 70L70 30L90 60L110 10' stroke='%233d3d3d' stroke-width='0.3' fill='none' opacity='0.7'/%3E%3C/svg%3E");
-  }
-  
-  /* Location Text Styling */
-  .theme-finance .location-details {
-    font-family: 'Roboto Condensed', sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: var(--secondary);
-  }
-  
-  /* BPS Buttons Styling */
-  .theme-finance .map-controls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin: 10px 0;
-  }
-  
-  .theme-finance .map-controls button {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    min-width: auto;
-    background: white;
-    border: 1px solid var(--secondary);
-    color: var(--text-primary);
-    font-family: 'Roboto Condensed', sans-serif;
-  }
-  
-  .theme-finance .map-controls button:hover {
-    background: #f5f5f5;
-  }
-
-.App.theme-finance {
-  /* Color Palette */
-  --primary: #001a3f;       /* Deep navy */
-  --secondary: #3d3d3d;     /* Graphite gray */
-  --tertiary: #e5e4e2;      /* Platinum */
-  --accent-positive: #00a86b; /* Calculated green */
-  --accent-negative: #d62828; /* Cautionary red */
-  --text-primary: #333333;
-  --text-secondary: #ffffff;
-  
-  /* Typography */
-  font-family: 'Playfair Display', 'Roboto Condensed', serif;
-  
-  /* Background with data graph watermark */
-  background-color: var(--tertiary);
-  background-image: 
-    linear-gradient(rgba(229, 228, 226, 0.9), rgba(229, 228, 226, 0.9)),
-    url("data:image/svg+xml,%3Csvg width='120' height='80' viewBox='0 0 120 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 60L30 30L50 50L70 10L90 40L110 20' stroke='%23001a3f' stroke-width='0.3' fill='none' stroke-dasharray='2 2'/%3E%3Cpath d='M10 70L30 40L50 70L70 30L90 60L110 10' stroke='%233d3d3d' stroke-width='0.3' fill='none' opacity='0.7'/%3E%3C/svg%3E");
-}
-
-/* Header */
-.theme-finance .header {
-  background: linear-gradient(to right, var(--primary), var(--secondary));
-  border-bottom: 3px solid var(--tertiary);
-  color: var(--tertiary);
-}
-
-.theme-finance .header h1 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  color: var(--tertiary);
-}
-
-/* Cards */
-.theme-finance .card {
-  background-color: white;
-  border: 1px solid var(--secondary);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-/* Status Indicators */
-.theme-finance .status-active {
-  color: var(--accent-positive);
-  font-weight: bold;
-}
-
-.theme-finance .failover-alert {
-  background-color: rgba(214, 40, 40, 0.08);
-  border-left: 4px solid var(--accent-negative);
-  color: var(--accent-negative);
-  font-family: 'Roboto Condensed', sans-serif;
-}
-
-/* Buttons */
-.theme-finance button {
-  background: white;
-  border: 1px solid var(--secondary);
-  color: var(--text-primary);
-  font-family: 'Roboto Condensed', sans-serif;
-  font-weight: 700;
-  padding: 8px 15px 8px 35px;
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-/* Financial Icons */
-.theme-finance button::before {
-  content: "";
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  background-color: transparent;
-}
-
-/* Different icons for different button types */
-.theme-finance button[onclick*="Jamming"]::before {
-  /* Alert icon */
-  content: "⚠";
-  color: var(--accent-negative);
-  font-size: 1.2rem;
-}
-
-.theme-finance button[onclick*="Unavailable"]::before {
-  /* Warning icon */
-  content: "❗";
-  color: var(--accent-negative);
-}
-
-.theme-finance button[onclick*="Scenario"]::before {
-  /* Graph icon */
-  content: "📈";
-  font-size: 0.9rem;
-}
-
-.theme-finance button[onclick*="Normal"]::before {
-  /* Checkmark icon */
-  content: "✓";
-  color: var(--accent-positive);
-  font-weight: bold;
-  font-size: 1.1rem;
-}
-
-/* Tabs */
-.theme-finance .tabs {
-  border-bottom: 1px solid var(--tertiary);
-}
-
-.theme-finance .tab {
-  background: white;
-  border: 1px solid var(--tertiary);
-  border-bottom: none;
-  color: var(--text-primary);
-}
-
-.theme-finance .tab:hover {
-  background: rgba(0, 168, 107, 0.05);
-}
-
-/* Map Styling */
-.theme-finance .leaflet-container {
-  background-color: white !important;
-  border: 1px solid var(--tertiary) !important;
-}
-
-.theme-finance .leaflet-control-zoom a {
-  background-color: white !important;
-  color: var(--secondary) !important;
-  border: 1px solid var(--tertiary) !important;
-}
-
-/* Chart Styling */
-.theme-finance #delayGraph {
-  border: 1px solid var(--tertiary);
-  background-color: white;
-}
-
-/* Readiness Bubble */
-.theme-finance .readiness-bubble.stable {
-  background-color: rgba(0, 168, 107, 0.1);
-  border: 1px solid var(--accent-positive);
-  color: var(--accent-positive);
-}
-
-.theme-finance .readiness-bubble.active {
-  background-color: rgba(214, 40, 40, 0.1);
-  border: 1px solid var(--accent-negative);
-  color: var(--accent-negative);
-}
-
-/* Master Clock */
-.theme-finance #master-clock-time {
-  color: var(--primary);
-  font-family: 'Roboto Condensed', sans-serif;
-  font-weight: 700;
-}
-
-/* Sync Details */
-.theme-finance .sync-details {
-  color: var(--text-primary);
-  font-family: 'Roboto Condensed', sans-serif;
-}
-
-.theme-finance .sync-details .status-active {
-  color: var(--accent-positive);
-}
-
-/* Financial Panel Specifics */
-.theme-finance .finance-panel {
-  background: white;
-  border-left: 4px solid var(--primary);
-}
-
-.theme-finance .finance-panel h3 {
-  color: var(--primary);
-  border-bottom: 1px solid var(--tertiary);
-  padding-bottom: 8px;
-  font-family: 'Playfair Display', serif;
-}
-
-/* Animation for positive/negative changes */
-@keyframes pulsePositive {
-  0% { background-color: white; }
-  50% { background-color: rgba(0, 168, 107, 0.05); }
-  100% { background-color: white; }
-}
-
-@keyframes pulseNegative {
-  0% { background-color: white; }
-  50% { background-color: rgba(214, 40, 40, 0.05); }
-  100% { background-color: white; }
-}
-
-.theme-finance .sync-details p:nth-child(1) {
-  animation: pulsePositive 3s infinite;
-}
-
-.theme-finance .sync-details p:nth-child(2) {
-  animation: pulseNegative 3s infinite 1.5s;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .theme-finance button {
-    padding-left: 30px;
-  }
-  
-  .theme-finance button::before {
-    left: 8px;
-  }
-}
-.theme-normal .stakeholder-panel,
-.theme-normal .stakeholder-panel * {
-  font-family: 'Nunito Sans', sans-serif !important;
-}
-
-.theme-normal .stakeholder-panel h3 {
-  font-family: 'Open Sans', sans-serif !important;
-  font-weight: 600;
-  font-size: 1.1rem !important;
-}
-
-.theme-normal .stakeholder-panel p {
-  font-size: 0.95rem !important;
-  line-height: 1.5 !important;
-}
-/* =====================
-   MEDIA QUERIES
-   ===================== */
-   @media (max-width: 768px) {
-    .theme-finance .map-controls button {
-      font-size: 0.65rem !important;
-      padding: 4px 8px !important;
-      height: 24px !important;
-      min-width: 65px !important;
-    }
-  }
-/* Tabs */
-.theme-power .tabs {
-  border-bottom: 1px solid var(--tertiary);
-}
-
-.theme-power .tab {
-  background: var(--primary);
-  border: 1px solid var(--tertiary);
-  border-bottom: none;
-  color: var(--text-primary);
-}
-
-.theme-power .tab:hover {
-  background: rgba(255, 215, 0, 0.1);
-}
-
-/* Map Styling */
-.theme-power .leaflet-container {
-  background-color: #001a4d !important;
-}
-
-.theme-power .leaflet-control-zoom a {
-  background-color: var(--secondary) !important;
-  color: var(--tertiary) !important;
-  border: 1px solid var(--tertiary) !important;
-}
-
-/* Chart Styling */
-.theme-power #delayGraph {
-  border: 1px solid var(--tertiary);
-  background-color: var(--secondary);
-}
-
-/* Readiness Bubble */
-.theme-power .readiness-bubble.stable {
-  background-color: rgba(0, 57, 166, 0.3);
-  border: 1px solid var(--tertiary);
-  color: var(--tertiary);
-}
-
-.theme-power .readiness-bubble.active {
-  background-color: rgba(255, 215, 0, 0.3);
-  border: 1px solid var(--accent);
-  color: var(--accent);
-}
-
-/* Master Clock */
-.theme-power #master-clock-time {
-  color: var(--accent);
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
-}
-
-/* Sync Details */
-.theme-power .sync-details {
-  color: var(--text-primary);
-}
-
-.theme-power .sync-details span {
-  color: var(--accent);
-  font-weight: bold;
-}
-
-/* Special Pulse Animation for Power Grid */
-@keyframes powerPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; text-shadow: 0 0 10px var(--accent); }
-}
-
-.theme-power .status-active {
-  animation: powerPulse 2s infinite;
-}
-
-/* Connection Lines Effect */
-.theme-power .dashboard-row {
-  position: relative;
-}
-
-.theme-power .dashboard-row::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--tertiary) 20%, 
-    var(--accent) 50%, 
-    var(--tertiary) 80%, 
-    transparent 100%);
-  opacity: 0.5;
-}
-  /* Header */
-  .theme-military .header {
-    background: linear-gradient(135deg, var(--primary), #1e2a2e);
-    border: 1px solid var(--tertiary);
-    border-bottom: 3px solid var(--secondary);
-    color: var(--text-primary);
-  }
-  
-  .theme-military .header h1 {
-    font-family: 'Agency FB', sans-serif;
-    font-weight: 700;
-    color: var(--tertiary);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    letter-spacing: 1px;
-  }
-  
-  /* Cards */
-  .theme-military .card {
-    background-color: rgba(42, 52, 57, 0.9);
-    border: 1px solid var(--tertiary);
-    box-shadow: 0 0 15px rgba(0,0,0,0.4);
-  }
-  
-  /* Status Indicators */
-  .theme-military .status-active {
-    color: var(--secondary);
-    font-weight: bold;
-  }
-  
-  .theme-military .failover-alert {
-    background-color: rgba(178, 34, 34, 0.15);
-    border-left: 4px solid var(--accent);
-    color: var(--text-primary);
-    font-weight: bold;
-  }
-  
-  /* Buttons */
-  .theme-military button {
-    background: linear-gradient(to bottom, #3a4a3f, var(--primary));
-    border: 1px solid var(--tertiary);
-    color: var(--text-primary);
-    font-family: 'Agency FB', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.8px;
-    padding: 8px 15px 8px 30px;
-    position: relative;
-    text-transform: uppercase;
-  }
-  
-  /* Military Icons (CSS-generated) */
-  .theme-military button::before {
-    content: "";
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 14px;
-    height: 14px;
-    background-color: var(--tertiary);
-    clip-path: polygon(
-      50% 0%,
-      60% 40%,
-      100% 50%,
-      60% 60%,
-      50% 100%,
-      40% 60%,
-      0% 50%,
-      40% 40%
-    ); /* Star shape */
-  }
-  
-  /* Tabs */
-  .theme-military .tabs {
-    border-bottom: 1px solid var(--tertiary);
-  }
-  
-  .theme-military .tab {
-    background: var(--primary);
-    border: 1px solid var(--tertiary);
-    border-bottom: none;
-    color: var(--text-primary);
-  }
-  
-  .theme-military .tab:hover {
-    background: rgba(85, 107, 47, 0.3);
-  }
-  
-  /* Map Styling */
-  .theme-military .leaflet-container {
-    background-color: #1a2429 !important;
-    filter: sepia(30%) contrast(120%);
-  }
-  
-  .theme-military .leaflet-control-zoom a {
-    background-color: var(--primary) !important;
-    color: var(--tertiary) !important;
-    border: 1px solid var(--tertiary) !important;
-  }
-  
-  /* Chart Styling */
-  .theme-military #delayGraph {
-    border: 1px solid var(--tertiary);
-  }
-  
-  /* Readiness Bubble */
-  .theme-military .readiness-bubble.stable {
-    background-color: rgba(85, 107, 47, 0.2);
-    border: 1px solid var(--secondary);
-    color: var(--secondary);
-  }
-  
-  .theme-military .readiness-bubble.active {
-    background-color: rgba(178, 34, 34, 0.2);
-    border: 1px solid var(--accent);
-    color: var(--accent);
-  }
-  
-  /* Master Clock */
-  .theme-military #master-clock-time {
-    color: var(--tertiary);
-    font-weight: bold;
-    letter-spacing: 1px;
-  }
-  
-  /* Sync Details */
-  .theme-military .sync-details {
-    color: var(--text-primary);
-  }
-  
-  .theme-military .sync-details span {
-    color: var(--secondary);
-    font-weight: bold;
-  }
-
- /* =============================================
    ROOT VARIABLES & BASE STYLES
-   ============================================= */
+   ===================== */
    :root {
     /* Color Palette */
     --military-green: #0a2d1c;
@@ -679,30 +29,23 @@
     --text-green: #4eff91;
     --text-yellow: #ffe74c;
     --text-red: #ff5c5c;
-    
     /* UI Elements */
     --grid-line: rgba(74, 255, 160, 0.2);
     --terminal-bg: rgba(10, 45, 28, 0.85);
     --terminal-border: #1a5a40;
     --glass-overlay: rgba(9, 44, 21, 0.65);
-    
     /* Effects */
     --glow-green: 0 0 10px rgba(74, 255, 160, 0.4);
-    --crt-scanline: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='scanlines' width='1' height='2' patternUnits='userSpaceOnUse' patternTransform='rotate(0)'%3E%3Crect x='0' y='0' width='1' height='1' fill='rgba(0, 0, 0, 0)'/%3E%3Crect x='0' y='1' width='1' height='1' fill='rgba(0, 0, 0, 0.03)'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23scanlines)'/%3E%3C/svg%3E");
-    --grid-background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='rgba(74, 255, 160, 0.1)' stroke-width='1'/%3E%3C/svg%3E");
-    
+    --crt-scanline: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='scanlines' width='1' height='2' patternUnits='userSpaceOnUse' patternTransform='rotate(0)'%3E%3Crect x='0' y='0' width='1' height='1' fill='rgba(0,0,0,0)'/%3E%3Crect x='0' y='1' width='1' height='1' fill='rgba(0,0,0,0.03)'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23scanlines)'/%3E%3C/svg%3E");
+    --grid-background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='rgba(74,255,160,0.1)' stroke-width='1'/%3E%3C/svg%3E");
     /* Typography */
     --font-terminal: 'JetBrains Mono', 'Courier New', monospace;
     --font-display: 'Orbitron', 'Arial', sans-serif;
     --font-tactical: 'Quantico', 'Verdana', sans-serif;
-
     --font-power: 'VT323', monospace;
   }
   
-  /* Font imports */
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700&family=Quantico:wght@400;700&display=swap');
-  
-  /* Base styles */
+  /* Global Reset & Base Styles */
   * {
     box-sizing: border-box;
     margin: 0;
@@ -717,6 +60,7 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
+  
   
   /* =============================================
      APP & MAIN LAYOUT
@@ -769,8 +113,6 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--text-yellow);
-    text-shadow: var(--glow-green);
   }
   
   .header p {
@@ -778,6 +120,106 @@
     opacity: 0.9;
   }
   
+
+  
+/* =====================
+   MILITARY THEME STYLES
+   ===================== */
+   .App.theme-military {
+    /* Color Palette */
+    --primary: #2a3439;       /* Deep slate gray */
+    --secondary: #556B2F;     /* Olive green (darkened for better contrast) */
+    --tertiary: #9fc7ae;      /* Muted bronze (peruvian tan) */
+    --accent: #B22222;        /* Tactical red (firebrick) */
+    --text-primary: #e0e0e0;
+    --text-secondary: #ffffff;
+    
+    /* Typography */
+    font-family: 'Agency FB', 'Franklin Gothic Condensed', sans-serif;
+    letter-spacing: 0.5px;
+    
+    /* Background with topo/grid overlay */
+    /* Optionally, override background-image if needed */
+    background-image: var(--grid-background);
+    
+    font-family: 'Agency FB', 'Franklin Gothic Condensed', sans-serif;
+  }
+  /* =====================
+   POWER GRID THEME STYLES
+   ===================== */
+  .App.theme-power {
+    /* Color Palette */
+    --primary: #0b1a2b;       /* Electric blue */
+    --secondary: #1f2937;     /* Deep indigo */
+    --tertiary: #838582;      /* Metallic silver */
+    --accent: #fbbf24;        /* High-voltage yellow */
+    --text-primary: #e6f7ff;
+    --text-secondary: #ffffff;
+    
+    /* Typography */
+    font-family: 'Share Tech', 'Rajdhani', sans-serif;
+    letter-spacing: 0.3px;
+    
+    /* Background with data graph watermark */
+    letter-spacing: 0.3px;
+    
+    background-color: #0b6363 !important;
+    background-image: var(--grid-background) !important;  /* Military grid added */
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(112, 126, 128, 0.7);
+    background-color: var(--primary);
+  }
+  /* =====================
+   FINANCIAL THEME STYLES
+   ===================== */
+
+   .App.theme-finance {
+    /* Color Palette */
+    --primary: #001a3f;       /* Deep navy */
+    --secondary: #3d3d3d;     /* Graphite gray */
+    --tertiary: #e5e4e2;      /* Platinum */
+    --accent-positive: #00a86b; /* Calculated green */
+    --accent-negative: #d62828; /* Cautionary red */
+    --text-primary: #333333;
+    --text-secondary: #ffffff;
+    
+    /* Typography */
+    font-family: 'Playfair Display', 'Roboto Condensed', serif;
+    
+    /* Background with data graph watermark */
+    background-color: #1a3b6d !important;
+    background-image: var(--grid-background) !important;  /* Military grid added */
+    color: #333 !important;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  /* =====================
+    NORMAL THEME STYLES 
+    ===================== */
+    .App.theme-normal {
+      /* Color Palette */
+      --primary: #416be9;       /* Classic light-gray */
+      --secondary: #000000;     /* Black */
+      --tertiary: #e6e33a;      /* Bright yellow */
+      --accent: #ffffff;        /* White */
+      --text-primary: #333333;
+      --text-secondary: #ffffff;
+      background-color: #606c92 !important;
+      background-image: var(--grid-background) !important;  /* Military grid added */
+      color: #000000 !important;
+      font-family: 'Arial', sans-serif;
+      
+      /* Typography */
+      font-family: 'Nunito Sans', 'Open Sans', sans-serif;
+      
+      /* Background with data graph watermark */
+      background-color: var(--primary);
+    }
+
+
+    
+
+    
   /* =============================================
      DASHBOARD COMPONENTS
      ============================================= */
@@ -802,6 +244,7 @@
     padding: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
+    border-radius: 8px;
   }
     /* Military Theme */
   .App.theme-military .card {
@@ -811,49 +254,45 @@
 
   /* Power Grid Theme */
   .App.theme-power .card {
-    background-color: #22457a; /* darker slate for a power-grid look */
+    background-color: #4179cc; /* darker slate for a power-grid look */
     border: 1px solid #00e5ff; /* optional: electric-blue border */
   }
 
   /* Finance Theme */
   .App.theme-finance .card {
-    background-color: #d6d5ce; /* crisp white for finance */
+    background-color: #aee3f365; /* crisp white for finance */
     border: 1px solid #ccc;    /* subtle gray border */
   }
 
   /* Normal Theme */
   .App.theme-normal .card {
-    background-color: #4e566d; /* classic light-gray for normal */
+    background-color: #c1cae6; /* classic light-gray for normal */
     border: 1px solid #000000;    /* optional: light border */
   }
 
-  .App.theme-power .sync-details span {
-    text-shadow: 0 0 6px #684595;
-  }
-  .App.theme-finance .sync-details span {
-    text-shadow: 0 0 6px #ffffff;
-  }
-  .App.theme-normal .sync-details span {
-    text-shadow: 0 0 3px #524674;
-  }
   
 
 
   /* Master clock */
   .master-clock {
-    font-family: var(--font-terminal);
+    align-items: center;
+    justify-content: center;
     padding: 10px;
-    border-bottom: 1px solid var(--grid-line);
     margin-bottom: 15px;
+    display: flex;
+    width: 100%;
+    text-align: center;
   }
+  
   
   .master-clock h3 {
     font-family: var(--font-display);
     font-size: 1.1rem;
-    color: var(--text-yellow);
     margin-bottom: 10px;
     text-transform: uppercase;
   }
+
+
   
   .master-clock p {
     margin: 5px 0;
@@ -863,29 +302,67 @@
   #master-clock-time {
     font-size: 1.2rem;
     font-weight: bold;
-    color: var(--text-yellow);
     letter-spacing: 1px;
   }
-  
-  /* System status */
+
+
+
+
   .sync-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 15px 0;
-    font-family: var(--font-terminal);
-    font-size: 0.9rem;
+    font-size: 1.3rem;
+    margin: 10px;
   }
   
   .sync-details p {
-    display: flex;
-    align-items: center;
     gap: 10px;
+    margin: 10px;
   }
   
   .status-active {
     animation: pulse 2s infinite;
   }
+
+  
+
+  .system-location {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    font-family: 'orbitron', sans-serif;
+    padding-left: 10px;
+  }
+
+  
+  .theme-military .system-location {
+    color: var(--text-yellow);
+    text-shadow: 0 0 4px limegreen;
+    font-size: 1.0rem;
+    color: var(--text-yellow);
+    text-shadow: var(--glow-green);
+    text-align: center;
+  }
+  .theme-power .system-location {
+    color: #00e5ff;
+    text-shadow: 0 0 2px rgba(202, 37, 128, 0.2);
+    font-family: 'orbitron', sans-serif;
+    font-size: 1.0rem;
+    text-align: center;
+  }
+  .theme-finance .system-location {
+    text-shadow: 0 0 3px gold;
+    font-family: 'jetbrains mono', sans-serif;
+    font-size: 1.0rem;
+    color: #ffffff;
+    text-shadow: #f8b806 0px 0px 2px;
+    text-align: center;
+  }
+  .theme-normal .system-location {
+    color: #143d8a;
+    font-size: 1.0rem;
+    color: #000203;
+    text-align: center;
+  }
+
   
   /* =============================================
      TAB SYSTEM
@@ -923,14 +400,162 @@
   .tab-content p {
     margin-bottom: 5px;
   }
+
+  /* BPS Tab Section Centering */
+.bps-tab-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.bps-tab-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+}
+.bps-tab-inner h2 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.bps-tab-inner p {
+  font-size: 1.0em;
+  margin-bottom: 10px;
+  color: #000000
+}
+
+.bps-tab-inner .map-controls {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: column;  /* arrange buttons vertically */
+  justify-content: flex-start; /* align buttons to the top */
+  align-items: flex-start; /* align content to the right */
+  gap: 10px;
+  padding: 10px;
+}
+
+/* Base styling for BPS station info */
+.bps-station-info {
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+}
+
+.bps-station-info h2 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.bps-station-info p {
+  font-size: 1.2m;
+  margin: 5px 0;
+}
+
+.station-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px;
+  font-family: var(--font-terminal);
+  font-size: 0.9rem;
+}
+
+.station-details h2 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.theme-military .bps-station-info {
+  background-color: #11231d;
+  border: 1px solid var(--terminal-border);
+}
+
+.theme-military .station-details h2 {
+  color: var(--text-green);
+}
+
+.theme-military .station-details p {
+  color: #77ff77;
+}
+.theme-power .bps-station-info {
+  background-color: #0e1b3c;
+  border: 1px solid #3a5bd6;
+}
+
+.theme-power .station-details h2 {
+  color: #e010b3;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+.theme-power .station-details p {
+  color: #000000;
+  text-shadow:0 0 12px rgba(109, 151, 109, 0.1);
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: bold;
+  font-size: larger;
+}
+.theme-finance .bps-station-info {
+  background-color: #fef9ed;
+  border: 1px solid var(--secondary);
+}
+
+.theme-finance .station-details h2 {
+  color: #0557af;
+  text-shadow: #d37e1c 0px 0px 5px;
+}
+
+.theme-finance .station-details p {
+  color: #000000;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+  font-size: larger;
+  text-shadow: #da812e 0px 0px 2px; 
+}
+.theme-normal .bps-station-info {
+  background-color: #2c2c2c;
+  border: 1px solid #555;
+}
+
+.theme-normal .station-details h2 {
+  color: #f5f5f5;
+  text-shadow: #c4b105 0px 0px 5px;
+}
+
+.theme-normal .station-details p {
+  color: #ffffff;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: bold;
+  font-size: larger;
+  text-shadow: #c2c2b1 0px 0px 5px;
+}
+
+
+/* Map should still scale full width under its container */
+.bps-map {
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  margin-top: 10px;
+}
+
   
   /* =============================================
      MAP COMPONENTS
      ============================================= */
   .map-container, #gps-map, #bps-map {
     width: 100%;
-    height: 300px;
+    height: 350x;
     border: 1px solid var(--terminal-border);
+    border-radius: 18px;
     margin-top: 10px;
     background-color: #0a1a14;
     position: relative;
@@ -938,7 +563,6 @@
   
   .map-controls {
     display: flex;
-    flex-wrap: wrap;
     gap: 5px;
     margin: 10px 0;
   }
@@ -952,20 +576,156 @@
     padding: 6px 10px;
     cursor: pointer;
     border-radius: 2px;
+    width: 100%;
   }
   
   .map-controls button:hover {
     background: linear-gradient(to bottom, #234d38, #0c2a1c);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
   }
+
+  /* Normal - Map Controls */
+  .theme-normal .map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 6px;
+    margin: 8px 0;
+  }
+
+  .theme-normal .map-controls button {
+    background: linear-gradient(to bottom, #9ca2db, #47588f);
+    min-width: auto;
+    border: 1px solid var(--secondary);
+    color: #ffffff;
+    font-family: 'Nunito Sans', 'Open Sans', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .theme-normal .map-controls button:hover {
+    background: #3b3b3b;
+    color: #ffffff;
+  }
+
+  .theme-normal .map-controls button:active {
+    background: #143d8a;
+  }
   
+
+
+  /* Finance - Map Controls */
+  .theme-finance .map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .theme-finance .map-controls button {
+    min-width: auto;
+    /* Light, warm background */
+    background: linear-gradient(to bottom, #02044d, #0d48a0);
+    border: 1px solid #3d3d3d;
+    color: #ffffff;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .theme-finance .map-controls button:hover {
+    background: linear-gradient(to bottom, #d38217, #4b3901);
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1), 0 2px 5px rgba(0, 0, 0, 0.15);
+    color: #ffffff;
+
+  }
+
+  .theme-finance .map-controls button:active {
+    background: #3b7fe696;
+    transform: translateY(1px);
+  }
+
+   /* BPS military Buttons Styling */
+   .theme-military .map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    margin: 10px 0;
+  }
+  
+  .theme-military .map-controls button {
+    background: linear-gradient(to bottom, #1a3e2a, #0c2418);
+    border: 1px solid var(--terminal-border);
+    color: var(--text-green);
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  
+  .theme-military .map-controls button:hover {
+    background: #d6b601;
+    color: #0e4707;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
+    font-weight: bolder;
+  }
+
+  .theme-military .map-controls button:active {
+    background: #003d18;
+  }
+
+  /* Power Grid - Map Controls */
+  .theme-power .map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .theme-power .map-controls button {
+    min-width: auto;
+    /* Dark gradient background */
+    background: linear-gradient(to bottom, #06473c, #112d44);
+    border: 1px solid var(--secondary);
+    color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .theme-power .map-controls button:hover {
+    background: linear-gradient(to bottom, #2a0647, #7a0d4d);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 5px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+  }
+
+  .theme-power .map-controls button:active {
+    background: linear-gradient(to bottom, #0b1a2b, #112d44);
+  }
+
+
+
+
   /* =============================================
      BUTTONS & CONTROLS
      ============================================= */
   button {
-    background: linear-gradient(to bottom, #1a3e2a, #0c2418);
+    background: linear-gradient(to bottom, #000000, #3c3d3d);
     border: 1px solid var(--terminal-border);
-    color: var(--text-green);
+    color: #ffffff;
     font-family: var(--font-terminal);
     font-size: 0.85rem;
     padding: 8px 12px;
@@ -973,28 +733,32 @@
     text-transform: uppercase;
     position: relative;
     transition: all 0.2s ease;
-    border-radius: 2px;
+    border-radius: 30px;
     letter-spacing: 1px;
   }
   
   button:hover {
-    background: linear-gradient(to bottom, #234d38, #0c2a1c);
+    background: linear-gradient(to bottom, #8b918e, #0c2a1c);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
   }
   
   button:active {
-    background: linear-gradient(to bottom, #0c2418, #1a3e2a);
+    background: linear-gradient(to bottom, #0c2418, #8fb33b);
     box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
   }
   
   .failover-buttons {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     gap: 10px;
     margin-top: 15px;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(8,1fr); /* 4 columns x 2 rows = 8 grid */
   }
+
+  .failover-buttons.scenario-buttons { 
+  }
+  
   
   #dark-mode-btn {
     width: 40px;
@@ -1008,7 +772,119 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     z-index: 90;
   }
+
   
+
+
+
+
+  /* Theme Power Button */
+  .theme-power button {
+    background: linear-gradient(to bottom, #06473c, #112d44);
+    border: 1px solid var(--tertiary);
+    color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 30px;
+    letter-spacing: 1px;
+  }
+  
+  .theme-power button:hover {
+    background: linear-gradient(to bottom, #2a0647, #7a0d4d);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .theme-power button:active {
+    background: linear-gradient(to bottom, #1a3e2a, #3c2fec);
+    transform: translateY(1px);
+  }
+  /* Theme Finance Button */
+  .theme-finance button {
+    background: linear-gradient(to bottom, #02044d, #0d48a0);
+    border: 1px solid var(--secondary);
+    color: #ffffff;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 30px;
+    letter-spacing: 1px;
+  }
+  
+  .theme-finance button:hover {
+    background: linear-gradient(to bottom, #d38217, #4b3901);
+    box-shadow: inset 0 1px 0 rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.3);
+  }
+  
+  .theme-finance button:active {
+    background: linear-gradient(to bottom, #c1a65b, #f5f5f5);
+    transform: translateY(1px);
+  }
+  /* Theme Normal Button */
+  .theme-normal button {
+    background: linear-gradient(to bottom, #9ca2db, #47588f);
+    border: 1px solid #000000;
+    color: #ffffff;
+    font-family: 'Nunito Sans', 'Open Sans', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 30px;
+    letter-spacing: 1px;
+  }
+  
+  .theme-normal button:hover {
+    background: #3b3b3b;
+    box-shadow: inset 0 1px 0 rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.3);
+    color: #ffffff;
+  }
+  
+  .theme-normal button:active {
+    background: linear-gradient(to bottom, #c0c0c0, #f5f5f5);
+    transform: translateY(1px);
+  }
+  /* Theme Military Button */
+  .theme-military button {
+    background: linear-gradient(to bottom, #1a3e2a, #0c2418);
+    border: 1px solid var(--terminal-border);
+    color: var(--text-green);
+    font-family: var(--font-terminal);
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 30px;
+    letter-spacing: 1px;
+  }
+  .theme-military button:hover {
+    background: linear-gradient(to bottom, #234d38, #0c2a1c);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.3);
+    font-weight: bolder;
+  }
+  .theme-military button:active {
+    background: linear-gradient(to bottom, #0c2418, #8fb33b);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+  }
+  
+
+
+
+
+
   /* =============================================
      ALERTS & NOTIFICATIONS
      ============================================= */
@@ -1075,6 +951,8 @@
      ============================================= */
   .delay-card {
     padding: 15px;
+    width: 100%;
+    max-width: 800px;
   }
   
   .delay-card h2 {
@@ -1084,7 +962,60 @@
     margin-bottom: 15px;
     text-transform: uppercase;
   }
-  
+  /* =====================
+   DELAY CARD - THEMED STYLES
+   ===================== */
+
+/* Military */
+.theme-military .delay-card {
+  background-color: #0a1f16;
+  border: 1px solid #1a5a40;
+  color: var(--text-green);
+  box-shadow: 0 0 8px rgba(74, 255, 160, 0.4);
+}
+.theme-military .delay-card h2 {
+  color: var(--text-yellow);
+  text-shadow: 0 0 6px limegreen;
+}
+
+/* Power Grid */
+.theme-power .delay-card {
+  background-color: #112d44;
+  border: 1px solid #00e5ff;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+.theme-power .delay-card h2 {
+  color: #00e5ff;
+  text-shadow: 0 0 6px #8afff8;
+}
+
+/* Finance */
+.theme-finance .delay-card {
+  background-color: #aee3f365;
+  border: 1px solid #d38217;
+  color: #111;
+  box-shadow: 0 0 8px rgba(211, 130, 23, 0.4);
+}
+.theme-finance .delay-card h2 {
+  color: #3a3f54;
+  text-shadow: 0 0 6px #ccc;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Normal */
+.theme-normal .delay-card {
+  background-color: #c1cae6;
+  border: 1px solid #777;
+  color: #222;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+.theme-normal .delay-card h2 {
+  color: #1a1a1a;
+  text-shadow: 0 0 3px #bdbdbd;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
   /* =============================================
      LEAFLET MAP CUSTOMIZATIONS
      ============================================= */
@@ -1102,12 +1033,115 @@
   .leaflet-tile {
     filter: hue-rotate(190deg) saturate(0.7) brightness(0.8) invert(0.1) !important;
   }
+
+
+  /* =============================================
+     NORMAL THEME MAP CUSTOMIZATIONS
+     ============================================= */
+
+  .theme-normal .leaflet-container {
+    background: #f5f5f5 !important;
+    font-family: 'Nunito Sans', 'Open Sans', sans-serif !important;
+  }
+  
+  .theme-normal .leaflet-control-zoom a {
+    background: rgb(78, 66, 66) !important;
+    color: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    border-radius: 4px;
+    padding: 4px 6px;
+    transition: background 0.2s ease;
+  }
+  
+  .theme-normal .leaflet-control-zoom a:hover {
+    background: #e0e0e0 !important;
+  }
+
+  /* =============================================
+     POWER GRID THEME MAP CUSTOMIZATIONS
+     ============================================= */
+    
+  .theme-power .leaflet-container {
+    background: #0b1a2b !important;
+    font-family: 'Rajdhani', sans-serif !important;
+  }
+  .theme-power .leaflet-control-zoom a {
+    background: #2c66b8 !important;
+    color: #ffffff !important;
+    border: 1px solid #838582 !important;
+    border-radius: 4px;
+    padding: 4px 6px;
+    transition: background 0.2s ease;
+  }
+  .theme-power .leaflet-control-zoom a:hover {
+    background: #838582 !important;
+  }
+  /* =============================================
+     FINANCE THEME MAP CUSTOMIZATIONS
+     ============================================= */
+  .theme-finance .leaflet-container { 
+    background: #001a3f !important;
+    font-family: 'Roboto Condensed', sans-serif !important;
+  }
+  .theme-finance .leaflet-control-zoom a {
+    background: linear-gradient(to bottom, #02044d, #0d48a0);
+    color: #ffffff !important;
+    border: 1px solid #e5e4e2 !important;
+    border-radius: 4px;
+    padding: 4px 6px;
+    transition: background 0.2s ease;
+  }
+  .theme-finance .leaflet-control-zoom a:hover {
+    background: #e5e4e2 !important;
+  }
+  /* =============================================
+     MILITARY THEME MAP CUSTOMIZATIONS
+     ============================================= */
+  .theme-military .leaflet-container {
+    background: #2a3439 !important;
+    font-family: 'Agency FB', 'Franklin Gothic Condensed', sans-serif !important;
+  }
+  .theme-military .leaflet-control-zoom a {
+    background: #556B2F !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #9fc7ae !important;
+    border-radius: 4px;
+    padding: 4px 6px;
+    transition: background 0.2s ease;
+  }
+  .theme-military .leaflet-control-zoom a:hover {
+    background: #9fc7ae !important;
+  }
+  /* =============================================
+     MAP MARKERS
+     ============================================= */
+  .leaflet-marker-icon {
+    background: var(--military-dark) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid var(--text-green) !important;
+  }
+  .leaflet-marker-icon:hover {
+    background: var(--text-green) !important;
+    transform: scale(1.2) !important;
+    transition: transform 0.2s ease !important;
+  }
+  .leaflet-marker-icon:active {
+    background: var(--text-green) !important;
+    transform: scale(1) !important;
+    transition: transform 0.2s ease !important;
+  }
+
+  
+
   
   /* =============================================
      DARK MODE & THEME VARIANTS
-     ============================================= */
-  .App.dark-mode {
-    background-color: #050d0a;
+     /* ============================================= */
+  /* .App.dark-mode {
+    background-color: #606362;
   }
   
   .App.dark-mode .leaflet-tile {
@@ -1129,8 +1163,8 @@
   
   .App.thermal .leaflet-tile {
     filter: grayscale(1) contrast(1.5) !important;
-  }
-  
+  } */
+   */
   /* =============================================
      CUSTOM SCROLLBAR
      ============================================= */
@@ -1224,25 +1258,33 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px; /* Adjust spacing */
-  padding: 10px;
 }
 
-/* Each section (Clock, Status, Location) */
-.master-clock, .failover-status, .location-details {
-  flex: 1; /* Equal width */
-  min-width: 250px; /* Prevent items from being too small */
+
+/* Equal and Responsive Panels */
+.master-clock,
+.failover-status,
+.location-details {
+  flex: 1 1 300px; /* flex-grow, shrink, basis */
+  min-width: 250px;
 }
 
-/* Make sure elements are aligned properly */
-.master-clock h3, .failover-status p, .location-details p {
-  margin-bottom: 8px;
+/* Internal Text Consistency */
+.master-clock h3,
+.failover-status p,
+.location-details p {
+  margin-bottom: 6px;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  font-family: var(--font-terminal);
+  color: var(--text-primary);
 }
 
-/* Ensure tabs and maps remain separate */
-.tab-content {
-  margin-top: 15px;
+/* Optional: Visual separation */
+.failover-status,
+.location-details {
+  padding-left: 10px;
 }
-
 /* Hide tabs when not active */
 .tab-content.hidden {
   display: none;
@@ -1260,48 +1302,17 @@
   border: 1px solid var(--terminal-border);
   margin-top: 10px;
   background-color: #0a1a14;
-}/* Enlarged Tabs for GPS/BPS */
-.large-tab {
-  font-size: 1.2rem; /* Bigger font */
-  padding: 12px 25px; /* More padding */
-  min-width: 120px; /* Ensures tabs are bigger */
-  text-align: center;
-  border-radius: 5px;
-}
-
-/* THEME STYLES */
-.App.theme-power {
-  background-color: #0d6dc7 !important;
-  background-image: none !important;
-  color: #00e5ff !important;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
-  font-family: var(--font-power);
-}
-
-.App.theme-finance {
-  background-color: #d3dbbe !important;
-  background-image: none !important;
-  color: #333 !important;
-  font-family: 'Roboto', sans-serif;
-}
-
-.App.theme-normal {
-  background-color: #1f2435 !important;
-  background-image: none !important;
-  color: #000000 !important;
-  font-family: 'Arial', sans-serif;
-}
-
-.App.theme-military {
-  background-color: #0a2d1c !important;
-  /* Optionally, override background-image if needed */
-  background-image: var(--grid-background);
-  color: #44ff44 !important;
   
-  font-family: var(--font-terminal);
 }
 
 
+/* Center the button container */
+.theme-switcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 /* Optional: style buttons */
 .theme-switcher button {
   margin-right: 10px;
@@ -1334,15 +1345,15 @@
   }
   
   .theme-finance .header {
-    background: #f8f9fa;
+    background: #d3d8e3;
     color: #111;
-    border-bottom: 2px solid #3f51b5;
+    border-bottom: 2px solid #5d6cbd;
   }
   
   .theme-normal .header {
-    background: #395081;
+    background: #879cdb;
     color:  #0a0909;
-    border-bottom: 2px solid #161313;
+    border-bottom: 1px solid #161313;
   }
   
   /* Text styles for h1 and p inside header */
@@ -1359,11 +1370,12 @@
   
   .theme-military .header h1 {
     color: #ffe74c;
-    text-shadow: var(--glow-green);
+    text-shadow: #d3d8e3;
   }
   
   .theme-normal .header h1 {
-    color: #100d0d;
+    color: #ffffff;
+    text-shadow: #83834d;
   }
   
 
@@ -1377,8 +1389,13 @@
 
 /* Military Theme Styles */
 .theme-military .sector-panel.military-panel {
-  background-color: rgba(0, 100, 0, 0.1);
-  border: 1px solid darkgreen;
+  border: px solid darkgreen;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .military-panel .tactical-alerts {
@@ -1392,8 +1409,12 @@
 
 /* Power Grid Theme Styles */
 .theme-power .sector-panel.power-grid-panel {
-  background-color: rgba(0, 0, 139, 0.1);
-  border: 1px solid darkblue;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .power-grid-panel .status-indicator.warning {
@@ -1403,8 +1424,14 @@
 
 /* Finance Theme Styles */
 .theme-finance .sector-panel.finance-panel {
-  background-color: rgba(255, 215, 0, 0.1);
-  border: 1px solid goldenrod;
+  border: px solid rgb(255, 255, 255);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 5px;
+  color: rgb(255, 255, 255);
 }
 
 .finance-panel .risk-indicator.high-risk {
@@ -1414,8 +1441,28 @@
 
 /* Normal/Stakeholder Theme Styles */
 .theme-normal .sector-panel.stakeholder-panel {
-  background-color: rgba(26, 14, 50, 0.334);
-  border: 1px solid rgb(12, 11, 11);
+  border: px solid rgb(12, 11, 11);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+
+
+
+
+
+
+.grid-diagnostics {
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: auto;  
 }
 
 /* Add these styles to your existing App.css */
@@ -1447,6 +1494,7 @@
   padding: 15px;
   background: var(--terminal-bg);
   border: 1px solid var(--terminal-border);
+  width: 100%;
 }
 
 .scenario-buttons button {
@@ -1460,6 +1508,42 @@
   margin: 10px 0;
   border-radius: 4px;
 }
+
+.theme-military .scenario-alert {
+  background: rgba(119, 255, 119, 0.1);
+  border: 1px solid var(--text-green);
+  color: var(--text-green);
+  font-family: var(--font-terminal);
+}
+.theme-power .scenario-alert {
+  background: rgba(0, 229, 255, 0.445);
+  border: 1px solid #00e5ff;
+  color: #e670c8;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: bolder;
+  text-shadow: #000000 0px 0px 5px;
+}
+.theme-finance .scenario-alert {
+  background: #1a3b6d8e;
+  border: 1px solid #d38217;
+  color: #c6cfe7;
+  font-family: 'jet brains mono', sans-serif;
+  font-weight: bold;
+  text-shadow: #3f3f3f 0px 0px 5px;
+}
+.theme-normal .scenario-alert {
+  background: rgba(218, 217, 217, 0.63);
+  border: 1px solid #777;
+  color: #f5f5f5;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: bold;
+  text-shadow: #000000 0px 0px 5px;
+}
+
+
+
+
+
 
 
 
@@ -1482,6 +1566,9 @@
   font-size: 1.2rem;
 }
 
+
+
+
 .chart-container {
   position: relative;
   width: 100%;
@@ -1495,9 +1582,12 @@
   height: 100% !important;
 }
 
+
+
+
 .clickable-sync {
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
   color: var(--text-yellow);
   transition: all 0.2s ease;
 }
@@ -1506,3 +1596,196 @@
   color: var(--accent-yellow);
   text-shadow: var(--glow-green);
 }
+
+
+.top-status-center .failover-readiness {
+  margin-bottom: 12px;
+}
+
+.top-status-center .dashboard-row {
+  margin-top: 10px;
+}
+
+.top-status-center {
+  display: flex;
+  width: 100%;        /* 🟢 Make it responsive on smaller screens */
+}
+
+.top-status-center > .delay-card {
+  flex: 2;
+  min-width: 400px;
+}
+
+.top-status-center > .sector-panel {
+  flex: 1;
+  min-width: 300px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  align-items: center;
+  font-size: 1.0rem;
+}
+
+
+.card .dashboard-row .master-clock {
+  display: flex;
+}
+
+
+/* =====================
+   TOP STATUS WRAPPER
+   ===================== */
+   .top-status-wrapper {
+    display: flex;
+    justify-content:space-evenly ;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+
+
+  
+  .sync-location {
+    text-align: center;
+    font-family: var(--font-terminal);
+  }
+  
+  .gmt-clock {
+    font-size: 1.5rem;
+    color: var(--text-yellow);
+    font-family: var(--font-terminal);
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .sync-label {
+    font-weight: bold;
+  }
+  
+  .sync-label p {
+    margin: 2px 0;
+  }
+  
+  .sync-status-panel {
+    display: flex;
+    flex-direction: row;
+    height: 100%; 
+    gap: 12px; /* Adjust gap between each element */
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-family: var(--font-terminal);
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  /* MILITARY */
+  .theme-military .sync-status-panel {
+    color: var(--text-green);
+  }
+  
+  /* POWER */
+  .theme-power .sync-status-panel {
+    color: #00e5ff;
+    font-family: 'Playfair Display', serif;
+  }
+  /* FINANCE */
+  .theme-finance .sync-status-panel {
+    color: #3a3f54;
+  }
+  
+  /* NORMAL */
+  .theme-normal .sync-status-panel {
+    color: #07368d;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  
+
+
+  
+  .readiness-bubble {
+    margin-right: auto;
+
+  }
+  
+  /* =====================
+     THEME-SPECIFIC STYLES
+     ===================== */
+  
+  /* MILITARY */
+  .theme-military .sync-location {
+    color: var(--text-green);
+  }
+  .theme-military .gmt-clock {
+    color: var(--text-yellow);
+  }
+  
+  /* POWER */
+  .theme-power .sync-location {
+    color: #720ba1;
+  }
+  .theme-power .gmt-clock {
+    color: #00e5ff;
+  }
+  
+  /* FINANCE */
+  .theme-finance .sync-location {
+    color: #3a3f54;
+    font-family: 'jet brains mono', sans-serif;
+  }
+  .theme-finance .gmt-clock {
+    color: #ffffff;
+  }
+  
+  /* NORMAL */
+  .theme-normal .sync-location {
+    color: #1a1a1a;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  .theme-normal .gmt-clock {
+    color: #000000;
+    font-size: 1.2rem;
+  }
+  
+
+
+
+.failover-readiness {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+.system-metrics {
+  flex: 1s;
+  display: -ms-inline-grid ;
+  flex-direction: column;
+  font-family: 'orbitron', sans-serif;
+  font-size: 1.0rem;
+  align-items: flex start;
+  font-weight: bold;
+}
+
+.dual-clock-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0x;
+}
+
+.clock-row {
+  text-align: center;
+  font-size: 0.9rem;
+  padding-bottom: 5px;
+  
+}
+
+.gmt-clock {
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: var(--font-display);
+}
+
+
