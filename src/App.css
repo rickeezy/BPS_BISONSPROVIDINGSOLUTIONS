@@ -36,9 +36,7 @@
     --glass-overlay: rgba(9, 44, 21, 0.65);
     /* Effects */
     --glow-green: 0 0 10px rgba(74, 255, 160, 0.4);
-    --crt-scanline: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='scanlines' width='1' height='2' patternUnits='userSpaceOnUse' patternTransform='rotate(0)'%3E%3Crect x='0' y='0' width='1' height='1' fill='rgba(0,0,0,0)'/%3E%3Crect x='0' y='1' width='1' height='1' fill='rgba(0,0,0,0.03)'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23scanlines)'/%3E%3C/svg%3E");
-    --grid-background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='rgba(74,255,160,0.1)' stroke-width='1'/%3E%3C/svg%3E");
-    /* Typography */
+        /* Typography */
     --font-terminal: 'JetBrains Mono', 'Courier New', monospace;
     --font-display: 'Orbitron', 'Arial', sans-serif;
     --font-tactical: 'Quantico', 'Verdana', sans-serif;
@@ -82,14 +80,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: var(--crt-scanline);
     pointer-events: none;
     z-index: 100;
     opacity: 0.7;
   }
   
   /* Main layout containers */
-  .container {
+  .App .container {
     width: 96%;
     max-width: 1600px;
     margin: 0 auto;
@@ -553,7 +550,7 @@
      ============================================= */
   .map-container, #gps-map, #bps-map {
     width: 100%;
-    height: 350x;
+    height: 350px;
     border: 1px solid var(--terminal-border);
     border-radius: 18px;
     margin-top: 10px;
@@ -756,8 +753,6 @@
     grid-template-columns: repeat(8,1fr); /* 4 columns x 2 rows = 8 grid */
   }
 
-  .failover-buttons.scenario-buttons { 
-  }
   
   
   #dark-mode-btn {
@@ -1133,37 +1128,6 @@
     transform: scale(1) !important;
     transition: transform 0.2s ease !important;
   }
-
-  
-
-  
-  /* =============================================
-     DARK MODE & THEME VARIANTS
-     /* ============================================= */
-  /* .App.dark-mode {
-    background-color: #606362;
-  }
-  
-  .App.dark-mode .leaflet-tile {
-    filter: hue-rotate(260deg) saturate(0.3) brightness(0.6) invert(0.2) !important;
-  }
-  
-  .App.night-vision {
-    background-color: #0a1a0a;
-    color: #77ff77;
-  }
-  
-  .App.night-vision .leaflet-tile {
-    filter: hue-rotate(260deg) saturate(0.3) brightness(0.6) invert(0.2) !important;
-  }
-  
-  .App.thermal {
-    background-color: #0a0a0f;
-  }
-  
-  .App.thermal .leaflet-tile {
-    filter: grayscale(1) contrast(1.5) !important;
-  } */
 
   /* =============================================
      CUSTOM SCROLLBAR
